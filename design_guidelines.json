@@ -1,0 +1,82 @@
+{
+  "theme": "Light",
+  "archetype": "Archetype 4: Swiss & High-Contrast (Corporate RE/MAX Adaptation)",
+  "design_philosophy": "Authoritative, trustworthy, and functional. Uses sharp contrasts between pristine white space, deep black text, and striking RE/MAX brand colors (Royal Blue & Vibrant Red). Minimalist geometry to allow properties to shine.",
+  "colors": {
+    "background_primary": "#FFFFFF",
+    "background_secondary": "#F9FAFB",
+    "remax_blue": "#003DA5",
+    "remax_red": "#DC1C2E",
+    "text_primary": "#0A0A0A",
+    "text_secondary": "#4B5563",
+    "border": "#E5E7EB",
+    "surface": "#FFFFFF",
+    "surface_glass": "rgba(255, 255, 255, 0.8)",
+    "error": "#DC1C2E",
+    "success": "#16A34A"
+  },
+  "typography": {
+    "font_primary": "Cabinet Grotesk, sans-serif",
+    "font_secondary": "Manrope, sans-serif",
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-[#0A0A0A] leading-tight",
+      "h2": "text-3xl sm:text-4xl font-bold tracking-tight text-[#0A0A0A]",
+      "h3": "text-xl sm:text-2xl font-bold text-[#0A0A0A]",
+      "body": "text-base text-[#4B5563] leading-relaxed",
+      "labels": "text-xs font-bold uppercase tracking-[0.2em] text-[#0A0A0A]"
+    }
+  },
+  "spacing_and_layout": {
+    "section_padding": "py-20 md:py-32",
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "property_grid": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
+    "team_grid": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6",
+    "bento_grid": "grid grid-cols-1 md:grid-cols-8 lg:grid-cols-12 gap-8"
+  },
+  "ui_components": {
+    "buttons": {
+      "primary": "bg-[#003DA5] hover:bg-[#002b75] text-white font-bold py-3 px-6 rounded-none transition-colors duration-200",
+      "secondary": "bg-[#DC1C2E] hover:bg-[#a31522] text-white font-bold py-3 px-6 rounded-none transition-colors duration-200",
+      "outline": "border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white font-bold py-3 px-6 rounded-none transition-colors duration-200"
+    },
+    "cards": {
+      "property": "bg-white border border-[#E5E7EB] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-none overflow-hidden",
+      "team": "bg-[#F9FAFB] border border-[#E5E7EB] hover:border-[#003DA5] transition-colors duration-300 rounded-none text-center p-6"
+    },
+    "glassmorphism": "backdrop-blur-xl bg-white/80 border border-white/20 shadow-sm",
+    "tags": "bg-[#F3F4F6] text-[#0A0A0A] text-xs font-bold px-3 py-1 uppercase tracking-wide"
+  },
+  "media_assets": {
+    "hero": [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85"
+    ],
+    "properties": [
+      "https://images.unsplash.com/photo-1628012209120-d9db7abf7eab?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1721815693498-cc28507c0ba2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1631679706909-1844bbd07221?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBsaXZpbmclMjByb29tJTIwYnJpZ2h0fGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBsaXZpbmclMjByb29tJTIwYnJpZ2h0fGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85",
+      "https://images.pexels.com/photos/7031581/pexels-photo-7031581.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+    ],
+    "team": [
+      "https://images.unsplash.com/photo-1647580427155-0483906cb9de?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjByZWFsJTIwZXN0YXRlJTIwYWdlbnQlMjBwb3J0cmFpdCUyMHNtaWxpbmd8ZW58MHx8fHwxNzgyNDMxNzY0fDA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1772987438485-ac832640c8a5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHw0fHxwcm9mZXNzaW9uYWwlMjByZWFsJTIwZXN0YXRlJTIwYWdlbnQlMjBwb3J0cmFpdCUyMHNtaWxpbmd8ZW58MHx8fHwxNzgyNDMxNzY0fDA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1585240975858-7264fd020798?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjByZWFsJTIwZXN0YXRlJTIwYWdlbnQlMjBwb3J0cmFpdCUyMHNtaWxpbmd8ZW58MHx8fHwxNzgyNDMxNzY0fDA&ixlib=rb-4.1.0&q=85",
+      "https://images.pexels.com/photos/7641824/pexels-photo-7641824.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "https://images.unsplash.com/photo-1780733064206-4f200e41daa8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHwyfHxwcm9mZXNzaW9uYWwlMjByZWFsJTIwZXN0YXRlJTIwYWdlbnQlMjBwb3J0cmFpdCUyMHNtaWxpbmd8ZW58MHx8fHwxNzgyNDMxNzY0fDA&ixlib=rb-4.1.0&q=85"
+    ],
+    "locations": [
+      "https://images.pexels.com/photos/20670902/pexels-photo-20670902.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+    ]
+  },
+  "specific_instructions_to_main_agent": {
+    "language": "Strictly Czech (cs). All copy, navigation, buttons, and dummy data must be in Czech.",
+    "branding_logo": "Implement the RE/MAX logo using typography styling to bypass image constraints: `<div class='flex items-center gap-1 font-black text-2xl tracking-tighter'><span class='text-[#DC1C2E]'>RE</span><span class='text-[#003DA5]'>/</span><span class='text-[#003DA5]'>MAX</span><span class='ml-2 text-sm font-bold text-gray-500 tracking-normal border-l border-gray-300 pl-2'>Active Broker</span></div>`",
+    "accessibility_and_testing": "All interactive and key informational elements MUST include `data-testid` attributes (e.g., `data-testid='contact-submit-btn'`).",
+    "icons": "Use `lucide-react`. Required icons: Home, Phone, Mail, MapPin, Search, Menu, X, ChevronRight, User, Key, Building.",
+    "homepage_hero": "Hero overlay should not obscure the image entirely. Use a gradient mask or `bg-white/20` with dark, high-contrast text block for legibility. Include a prominent CTA 'Kontaktujte nás' (Contact Us) and 'Prodat nemovitost' (Sell a Property).",
+    "about_section": "Use a Bento Grid layout (Mode A) to display local Tachov knowledge, team ethos, and stats.",
+    "admin_dashboard": "Use Shadcn components for Data Tables, Inputs, and Dialogs. The dashboard should use `bg-[#F9FAFB]` to contrast with pure white `#FFFFFF` cards. Active sidebar links should use `#003DA5` background with white text.",
+    "property_cards": "Each card must show high-res image, price prominently in `#003DA5`, beds, baths, and square meters, plus a 'Zobrazit detail' (View Detail) button."
+  }
+}
