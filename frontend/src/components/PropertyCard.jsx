@@ -16,6 +16,7 @@ export const PropertyCard = ({ property }) => {
           <img
             src={mediaUrl(img)}
             alt={property.title}
+            loading="lazy"
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
