@@ -12,7 +12,7 @@ export default function About() {
             Malý tým s velkým srdcem pro Tachovsko
           </h1>
           <p className="mt-6 text-lg text-gray-600 leading-relaxed">
-            Jsme RE/MAX Active Broker – sehraná pětice nezávislých realitních profesionálů,
+            Jsme RE/MAX Active Broker – sehraná čtveřice nezávislých realitních profesionálů,
             kteří působí pod silnou značkou RE/MAX. Spojuje nás láska k regionu, poctivost
             a přesvědčení, že za každou nemovitostí stojí konkrétní lidský příběh.
           </p>

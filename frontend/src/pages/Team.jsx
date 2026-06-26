@@ -18,7 +18,7 @@ export default function Team() {
             Lidé, kterým na vás záleží
           </h1>
           <p className="mt-5 text-lg text-gray-600">
-            Pět zkušených makléřů připravených pomoci vám s prodejem, koupí i pronájmem nemovitosti.
+            Čtyři zkušení makléři připravení pomoci vám s prodejem, koupí i pronájmem nemovitosti.
           </p>
         </div>
 

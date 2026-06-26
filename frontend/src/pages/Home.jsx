@@ -30,7 +30,7 @@ export default function Home() {
               Váš domov začíná <span className="text-[#003DA5]">u nás</span>
             </h1>
             <p className="mt-6 text-lg text-gray-600 leading-relaxed max-w-xl">
-              Sehraný tým pěti zkušených makléřů s osobním přístupem a hlubokou znalostí
+              Sehraný tým čtyř zkušených makléřů s osobním přístupem a hlubokou znalostí
               tachovského regionu. Prodáme i koupíme vaši nemovitost rychle a bezpečně.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
@@ -59,7 +59,7 @@ export default function Home() {
           {[
             { icon: Award, value: "15+", label: "Let zkušeností" },
             { icon: HomeIcon, value: "500+", label: "Prodaných nemovitostí" },
-            { icon: Users, value: "5", label: "Profesionálních makléřů" },
+            { icon: Users, value: "4", label: "Profesionální makléři" },
             { icon: MapPin, value: "100%", label: "Znalost Tachovska" },
           ].map((s, i) => (
             <div key={i} data-testid={`stat-${i}`}>
