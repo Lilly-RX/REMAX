@@ -4,8 +4,6 @@ import { ArrowRight, Search, Home as HomeIcon, Award, Users, MapPin } from "luci
 import api from "@/lib/api";
 import { PropertyCard } from "@/components/PropertyCard";
 
-const HERO = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85";
-
 export default function Home() {
   const [featured, setFeatured] = useState([]);
 
@@ -16,38 +14,48 @@ export default function Home() {
   return (
     <div data-testid="home-page">
       {/* Hero */}
-      <section className="relative">
-        <div className="absolute inset-0">
-          <img src={HERO} alt="Moderní dům" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-white/10" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 md:py-40">
-          <div className="max-w-2xl animate-fade-up">
-            <div className="inline-flex items-center gap-2 bg-[#DC1C2E]/10 text-[#DC1C2E] text-xs font-bold uppercase tracking-[0.2em] px-4 py-2 mb-6">
-              <MapPin size={14} /> Realitní kancelář v Tachově
+      <section className="relative overflow-hidden bg-white border-b border-gray-100">
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-[#F9FAFB] hidden lg:block" />
+        <div className="absolute -bottom-10 right-10 w-72 h-72 bg-[#003DA5]/5 rounded-full blur-3xl hidden lg:block" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+            <div className="animate-fade-up">
+              <div className="inline-flex items-center gap-2 bg-[#DC1C2E]/10 text-[#DC1C2E] text-xs font-bold uppercase tracking-[0.2em] px-4 py-2 mb-6">
+                <MapPin size={14} /> Realitní kancelář v Tachově
+              </div>
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-[#0A0A0A] leading-[1.05]">
+                Váš domov začíná <span className="text-[#003DA5]">u nás</span>
+              </h1>
+              <p className="mt-6 text-lg text-gray-600 leading-relaxed max-w-xl">
+                Sehraný tým čtyř zkušených makléřů s osobním přístupem a hlubokou znalostí
+                tachovského regionu. Prodáme i koupíme vaši nemovitost rychle a bezpečně.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                <Link
+                  to="/kontakt"
+                  data-testid="hero-cta-contact"
+                  className="inline-flex items-center justify-center gap-2 bg-[#003DA5] hover:bg-[#002b75] text-white font-bold py-4 px-8 uppercase tracking-wider transition-colors"
+                >
+                  Kontaktujte nás <ArrowRight size={18} />
+                </Link>
+                <Link
+                  to="/nemovitosti"
+                  data-testid="hero-cta-listings"
+                  className="inline-flex items-center justify-center gap-2 border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white font-bold py-4 px-8 uppercase tracking-wider transition-colors"
+                >
+                  <Search size={18} /> Prohlédnout nabídku
+                </Link>
+              </div>
             </div>
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-[#0A0A0A] leading-[1.05]">
-              Váš domov začíná <span className="text-[#003DA5]">u nás</span>
-            </h1>
-            <p className="mt-6 text-lg text-gray-600 leading-relaxed max-w-xl">
-              Sehraný tým čtyř zkušených makléřů s osobním přístupem a hlubokou znalostí
-              tachovského regionu. Prodáme i koupíme vaši nemovitost rychle a bezpečně.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <Link
-                to="/kontakt"
-                data-testid="hero-cta-contact"
-                className="inline-flex items-center justify-center gap-2 bg-[#003DA5] hover:bg-[#002b75] text-white font-bold py-4 px-8 uppercase tracking-wider transition-colors"
-              >
-                Kontaktujte nás <ArrowRight size={18} />
-              </Link>
-              <Link
-                to="/nemovitosti"
-                data-testid="hero-cta-listings"
-                className="inline-flex items-center justify-center gap-2 border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white font-bold py-4 px-8 uppercase tracking-wider transition-colors"
-              >
-                <Search size={18} /> Prohlédnout nabídku
-              </Link>
+
+            <div className="relative animate-fade-up" style={{ animationDelay: "0.15s" }}>
+              <div className="absolute -top-4 -left-4 w-24 h-24 border-t-4 border-l-4 border-[#DC1C2E] hidden md:block" />
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 border-b-4 border-r-4 border-[#003DA5] hidden md:block" />
+              <img
+                src="/team-hero.png"
+                alt="Tým RE/MAX Active Broker"
+                className="relative w-full h-auto object-contain"
+              />
             </div>
           </div>
         </div>
