@@ -1,6 +1,6 @@
 import { MapPin, HeartHandshake, ShieldCheck, Target } from "lucide-react";
 
-const ABOUT_IMG = "https://images.pexels.com/photos/20670902/pexels-photo-20670902.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
+const ABOUT_IMG = "/tachov.jpg";
 
 export default function About() {
   return (

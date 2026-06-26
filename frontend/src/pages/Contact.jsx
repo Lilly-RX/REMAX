@@ -74,7 +74,7 @@ export default function Contact() {
                 <Phone className="text-[#003DA5] mt-0.5" />
                 <div>
                   <div className="font-bold text-[#0A0A0A]">Telefon</div>
-                  <a href="tel:+420777123456" className="text-gray-600 text-sm hover:text-[#003DA5]">+420 777 123 456</a>
+                  <a href="tel:+420371120180" className="text-gray-600 text-sm hover:text-[#003DA5]">+420 371 120 180</a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -88,7 +88,7 @@ export default function Contact() {
                 <Clock className="text-[#003DA5] mt-0.5" />
                 <div>
                   <div className="font-bold text-[#0A0A0A]">Otevírací doba</div>
-                  <p className="text-gray-600 text-sm">Po–Pá: 9:00–17:00 · So: 9:00–12:00 · Ne: zavřeno</p>
+                  <p className="text-gray-600 text-sm">Po–Pá: 8:30–17:00 · So–Ne: zavřeno</p>
                 </div>
               </div>
             </div>

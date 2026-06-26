@@ -35,7 +35,7 @@ export const Footer = () => {
               </li>
               <li className="flex items-center gap-2">
                 <Phone size={16} className="text-[#003DA5]" />
-                <a href="tel:+420777123456" className="hover:text-white">+420 777 123 456</a>
+                <a href="tel:+420371120180" className="hover:text-white">+420 371 120 180</a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={16} className="text-[#003DA5]" />
@@ -47,9 +47,8 @@ export const Footer = () => {
           <div>
             <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#DC1C2E] mb-4">Otevírací doba</h4>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li className="flex items-center gap-2"><Clock size={16} className="text-[#003DA5]" /> Po–Pá: 9:00 – 17:00</li>
-              <li className="pl-6">So: 9:00 – 12:00</li>
-              <li className="pl-6">Ne: zavřeno</li>
+              <li className="flex items-center gap-2"><Clock size={16} className="text-[#003DA5]" /> Po–Pá: 8:30 – 17:00</li>
+              <li className="pl-6">So–Ne: zavřeno</li>
             </ul>
           </div>
         </div>
