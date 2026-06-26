@@ -49,13 +49,22 @@ export default function Home() {
             </div>
 
             <div className="relative animate-fade-up" style={{ animationDelay: "0.15s" }}>
-              <div className="absolute -top-4 -left-4 w-24 h-24 border-t-4 border-l-4 border-[#DC1C2E] hidden md:block" />
-              <div className="absolute -bottom-4 -right-4 w-24 h-24 border-b-4 border-r-4 border-[#003DA5] hidden md:block" />
-              <img
-                src="/team-hero.png"
-                alt="Tým RE/MAX Active Broker"
-                className="relative w-full h-auto object-contain"
-              />
+              <div className="absolute -top-4 -left-4 w-24 h-24 border-t-4 border-l-4 border-[#DC1C2E] hidden md:block z-20" />
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 border-b-4 border-r-4 border-[#003DA5] hidden md:block z-20" />
+              <div className="relative aspect-[4/3] overflow-hidden bg-[#F9FAFB] shadow-xl">
+                <img
+                  src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85"
+                  alt="Nemovitost v Tachově"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#003DA5]/55 via-[#003DA5]/10 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent" />
+                <img
+                  src="/team-cutout.png"
+                  alt="Tým RE/MAX Active Broker"
+                  className="absolute inset-x-0 bottom-0 mx-auto w-[96%] h-[116%] object-contain object-bottom drop-shadow-2xl"
+                />
+              </div>
             </div>
           </div>
         </div>
