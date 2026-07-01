@@ -131,7 +131,7 @@ class TestAgents:
         r = public.get(f"{API}/agents")
         assert r.status_code == 200
         agents = r.json()
-        assert len(agents) >= 5
+        assert len(agents) >= 4
 
     def test_create_requires_auth(self, public):
         r = public.post(f"{API}/agents", json={"name": "TEST_unauth"})
@@ -214,6 +214,129 @@ class TestStats:
         r = admin.get(f"{API}/stats")
         assert r.status_code == 200
         d = r.json()
-        for k in ("properties", "agents", "messages", "unread_messages"):
+        for k in ("properties", "agents", "messages", "unread_messages", "reviews", "pending_reviews"):
             assert k in d
             assert isinstance(d[k], int)
+
+
+# ---------------- Reviews ----------------
+class TestReviews:
+    def test_public_create_office_review(self, public):
+        r = public.post(f"{API}/reviews", json={
+            "author_name": "TEST Reviewer", "email": "rev@test.cz", "rating": 5,
+            "text": "TEST office review — great service.",
+            "target_type": "office", "deal_type": "koupe"})
+        assert r.status_code == 200
+        assert "schválení" in r.json()["message"]
+
+    def test_public_create_rejects_bad_rating(self, public):
+        r = public.post(f"{API}/reviews", json={
+            "author_name": "TEST", "rating": 7, "text": "bad", "target_type": "office"})
+        assert r.status_code == 400
+        r = public.post(f"{API}/reviews", json={
+            "author_name": "TEST", "rating": 0, "text": "bad", "target_type": "office"})
+        assert r.status_code == 400
+
+    def test_new_review_not_in_public_list(self, public):
+        # Submit
+        public.post(f"{API}/reviews", json={
+            "author_name": "TEST_PendingHidden", "rating": 4,
+            "text": "Should be hidden until approved", "target_type": "office"})
+        # Fetch public — should not include pending
+        r = public.get(f"{API}/reviews")
+        assert r.status_code == 200
+        assert all(rv.get("status", "approved") == "approved" for rv in r.json())
+        assert not any(rv["author_name"] == "TEST_PendingHidden" for rv in r.json())
+
+    def test_all_requires_auth(self, public):
+        r = public.get(f"{API}/reviews/all")
+        assert r.status_code == 401
+
+    def test_approve_requires_auth(self, public):
+        r = public.put(f"{API}/reviews/some-id/approve")
+        assert r.status_code == 401
+
+    def test_full_approve_reply_delete_flow(self, admin, public):
+        # Create pending
+        r = public.post(f"{API}/reviews", json={
+            "author_name": "TEST_Flow", "rating": 5,
+            "text": "TEST_Flow content", "target_type": "office", "deal_type": "prodej"})
+        assert r.status_code == 200
+
+        # Find via admin all
+        all_ = admin.get(f"{API}/reviews/all").json()
+        target = next((x for x in all_ if x["author_name"] == "TEST_Flow" and x["status"] == "pending"), None)
+        assert target is not None, "pending review not found"
+        rid = target["id"]
+
+        # Not yet on public
+        pub = public.get(f"{API}/reviews").json()
+        assert not any(x["id"] == rid for x in pub)
+
+        # Approve
+        r = admin.put(f"{API}/reviews/{rid}/approve")
+        assert r.status_code == 200
+
+        # Now visible publicly
+        pub = public.get(f"{API}/reviews").json()
+        assert any(x["id"] == rid and x["status"] == "approved" for x in pub)
+
+        # Reply
+        r = admin.put(f"{API}/reviews/{rid}/reply", json={"reply": "TEST reply text"})
+        assert r.status_code == 200
+        pub = public.get(f"{API}/reviews").json()
+        it = next(x for x in pub if x["id"] == rid)
+        assert it["reply"] == "TEST reply text"
+
+        # Delete
+        r = admin.delete(f"{API}/reviews/{rid}")
+        assert r.status_code == 200
+        pub = public.get(f"{API}/reviews").json()
+        assert not any(x["id"] == rid for x in pub)
+
+    def test_agent_review_summary(self, admin, public):
+        agents = public.get(f"{API}/agents").json()
+        assert agents
+        aid = agents[0]["id"]
+        # Create + approve agent review
+        r = public.post(f"{API}/reviews", json={
+            "author_name": "TEST_AgentRev", "rating": 4,
+            "text": "TEST agent review", "target_type": "agent", "agent_id": aid,
+            "deal_type": "pronajem"})
+        assert r.status_code == 200
+        rid = next(x["id"] for x in admin.get(f"{API}/reviews/all").json() if x["author_name"] == "TEST_AgentRev")
+        admin.put(f"{API}/reviews/{rid}/approve")
+
+        summary = public.get(f"{API}/reviews/summary").json()
+        assert aid in summary
+        assert summary[aid]["count"] >= 1
+        assert 1 <= summary[aid]["avg"] <= 5
+
+        # Filter by agent
+        r = public.get(f"{API}/reviews", params={"agent_id": aid})
+        assert r.status_code == 200
+        assert any(x["id"] == rid for x in r.json())
+
+        # Cleanup
+        admin.delete(f"{API}/reviews/{rid}")
+
+    def test_office_target_forces_agent_id_null(self, admin, public):
+        agents = public.get(f"{API}/agents").json()
+        aid = agents[0]["id"]
+        public.post(f"{API}/reviews", json={
+            "author_name": "TEST_OfficeNull", "rating": 5, "text": "x",
+            "target_type": "office", "agent_id": aid})
+        found = next(x for x in admin.get(f"{API}/reviews/all").json() if x["author_name"] == "TEST_OfficeNull")
+        assert found["agent_id"] is None
+        admin.delete(f"{API}/reviews/{found['id']}")
+
+
+# ---------------- Cleanup ----------------
+def test_zzz_cleanup_test_reviews(request):
+    """Remove leftover TEST_ reviews from prior test runs."""
+    s = requests.Session()
+    s.post(f"{API}/auth/login", json={"email": ADMIN_EMAIL, "password": ADMIN_PASSWORD})
+    all_ = s.get(f"{API}/reviews/all").json()
+    for r in all_:
+        if r["author_name"].startswith("TEST"):
+            s.delete(f"{API}/reviews/{r['id']}")

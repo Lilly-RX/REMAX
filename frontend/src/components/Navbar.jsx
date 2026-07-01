@@ -8,6 +8,7 @@ const NAV = [
   { to: "/nemovitosti", label: "Nemovitosti" },
   { to: "/o-nas", label: "O nás" },
   { to: "/tym", label: "Náš tým" },
+  { to: "/recenze", label: "Recenze" },
   { to: "/kontakt", label: "Kontakt" },
 ];
 

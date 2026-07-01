@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Building, Users, MessageSquare, LogOut, LayoutGrid, ExternalLink } from "lucide-react";
+import { Building, Users, MessageSquare, LogOut, LayoutGrid, ExternalLink, Star } from "lucide-react";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { Logo } from "@/components/Logo";
 import { PropertiesPanel } from "./PropertiesPanel";
 import { AgentsPanel } from "./AgentsPanel";
 import { MessagesPanel } from "./MessagesPanel";
+import { ReviewsPanel } from "./ReviewsPanel";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -22,6 +23,7 @@ export default function Dashboard() {
     { id: "properties", label: "Nemovitosti", icon: Building },
     { id: "agents", label: "Makléři", icon: Users },
     { id: "messages", label: "Zprávy", icon: MessageSquare, badge: stats?.unread_messages },
+    { id: "reviews", label: "Recenze", icon: Star, badge: stats?.pending_reviews },
   ];
 
   const handleLogout = async () => {
@@ -71,12 +73,14 @@ export default function Dashboard() {
           <div data-testid="admin-overview">
             <h1 className="font-display text-3xl font-black text-[#0A0A0A]">Vítejte, {user?.name}</h1>
             <p className="text-gray-500 mt-1">Přehled vaší realitní kanceláře</p>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-8">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
               {[
                 { label: "Nemovitosti", value: stats?.properties, icon: Building, color: "#003DA5" },
                 { label: "Makléři", value: stats?.agents, icon: Users, color: "#003DA5" },
                 { label: "Zprávy celkem", value: stats?.messages, icon: MessageSquare, color: "#0A0A0A" },
-                { label: "Nepřečtené", value: stats?.unread_messages, icon: MessageSquare, color: "#DC1C2E" },
+                { label: "Nepřečtené zprávy", value: stats?.unread_messages, icon: MessageSquare, color: "#DC1C2E" },
+                { label: "Recenze", value: stats?.reviews, icon: Star, color: "#003DA5" },
+                { label: "Recenze ke schválení", value: stats?.pending_reviews, icon: Star, color: "#DC1C2E" },
               ].map((s, i) => (
                 <div key={i} className="bg-white border border-gray-200 p-6" data-testid={`overview-stat-${i}`}>
                   <s.icon size={22} style={{ color: s.color }} />
@@ -90,6 +94,7 @@ export default function Dashboard() {
         {tab === "properties" && <PropertiesPanel />}
         {tab === "agents" && <AgentsPanel />}
         {tab === "messages" && <MessagesPanel />}
+        {tab === "reviews" && <ReviewsPanel />}
       </main>
     </div>
   );

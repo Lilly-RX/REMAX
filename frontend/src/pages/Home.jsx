@@ -3,12 +3,15 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Search, Home as HomeIcon, Award, Users, MapPin } from "lucide-react";
 import api from "@/lib/api";
 import { PropertyCard } from "@/components/PropertyCard";
+import { StarRating } from "@/components/StarRating";
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     api.get("/properties", { params: { featured: true } }).then((r) => setFeatured(r.data.slice(0, 3)));
+    api.get("/reviews").then((r) => setReviews(r.data.slice(0, 3))).catch(() => {});
   }, []);
 
   return (
@@ -100,6 +103,32 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Testimonials */}
+      {reviews.length > 0 && (
+        <section className="bg-[#003DA5] text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#ff8a93]">Recenze klientů</span>
+                <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight mt-2">Co o nás říkají klienti</h2>
+              </div>
+              <Link to="/recenze" className="inline-flex items-center gap-2 font-bold text-white hover:gap-3 transition-all" data-testid="home-all-reviews">
+                Všechny recenze <ArrowRight size={18} />
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {reviews.map((r) => (
+                <div key={r.id} className="bg-white/10 backdrop-blur border border-white/15 p-6" data-testid={`home-review-${r.id}`}>
+                  <StarRating value={r.rating} size={16} />
+                  <p className="text-blue-50 mt-4 leading-relaxed line-clamp-5">„{r.text}"</p>
+                  <div className="mt-5 pt-4 border-t border-white/15 font-bold">{r.author_name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA band */}
       <section className="bg-[#F9FAFB] border-y border-gray-200">

@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { Phone, Mail } from "lucide-react";
 import api, { mediaUrl } from "@/lib/api";
+import { StarRating } from "@/components/StarRating";
 
 export default function Team() {
   const [agents, setAgents] = useState([]);
+  const [summary, setSummary] = useState({});
 
   useEffect(() => {
     api.get("/agents").then((r) => setAgents(r.data));
+    api.get("/reviews/summary").then((r) => setSummary(r.data)).catch(() => {});
   }, []);
 
   return (
@@ -39,6 +42,13 @@ export default function Team() {
               <div className="p-6">
                 <h3 className="font-display text-xl font-bold text-[#0A0A0A]">{a.name}</h3>
                 <p className="text-sm font-bold uppercase tracking-wider text-[#DC1C2E] mt-1">{a.role}</p>
+                {summary[a.id] && (
+                  <div className="flex items-center gap-2 mt-2" data-testid={`agent-rating-${a.id}`}>
+                    <StarRating value={summary[a.id].avg} size={15} />
+                    <span className="text-sm font-bold text-[#0A0A0A]">{summary[a.id].avg.toFixed(1)}</span>
+                    <span className="text-xs text-gray-500">({summary[a.id].count})</span>
+                  </div>
+                )}
                 <p className="text-sm text-gray-600 mt-3 leading-relaxed">{a.bio}</p>
                 <div className="mt-5 pt-4 border-t border-gray-100 space-y-2">
                   {a.phone && (

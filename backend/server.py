@@ -178,6 +178,31 @@ class ContactCreate(BaseModel):
     subject: str = "Kontaktní formulář"
     property_id: Optional[str] = None
 
+class ReviewModel(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    author_name: str
+    email: str = ""
+    rating: int = 5
+    text: str
+    target_type: str = "office"  # office | agent
+    agent_id: Optional[str] = None
+    deal_type: str = ""  # koupe | prodej | pronajem | jine
+    status: str = "pending"  # pending | approved
+    reply: str = ""
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+class ReviewCreate(BaseModel):
+    author_name: str
+    email: str = ""
+    rating: int = 5
+    text: str
+    target_type: str = "office"
+    agent_id: Optional[str] = None
+    deal_type: str = ""
+
+class ReplyBody(BaseModel):
+    reply: str
+
 # ---------------- Auth routes ----------------
 @api_router.post("/auth/login")
 async def login(body: LoginRequest, response: Response):
@@ -343,11 +368,69 @@ async def stats(user: dict = Depends(get_current_user)):
         "agents": await db.agents.count_documents({}),
         "messages": await db.messages.count_documents({}),
         "unread_messages": await db.messages.count_documents({"is_read": False}),
+        "reviews": await db.reviews.count_documents({}),
+        "pending_reviews": await db.reviews.count_documents({"status": "pending"}),
     }
 
 @api_router.get("/")
 async def root():
     return {"message": "RE/MAX Active Broker API"}
+
+# ---------------- Reviews routes ----------------
+@api_router.post("/reviews")
+async def create_review(body: ReviewCreate):
+    if body.rating < 1 or body.rating > 5:
+        raise HTTPException(status_code=400, detail="Hodnocení musí být 1–5")
+    review = ReviewModel(**body.model_dump())
+    if review.target_type != "agent":
+        review.agent_id = None
+    await db.reviews.insert_one(review.model_dump())
+    return {"message": "Děkujeme! Recenze byla odeslána ke schválení."}
+
+@api_router.get("/reviews")
+async def list_reviews(agent_id: Optional[str] = None, target_type: Optional[str] = None):
+    q = {"status": "approved"}
+    if agent_id:
+        q["agent_id"] = agent_id
+    if target_type:
+        q["target_type"] = target_type
+    reviews = await db.reviews.find(q, {"_id": 0}).sort("created_at", -1).to_list(500)
+    return reviews
+
+@api_router.get("/reviews/summary")
+async def reviews_summary():
+    pipeline = [
+        {"$match": {"status": "approved", "target_type": "agent"}},
+        {"$group": {"_id": "$agent_id", "avg": {"$avg": "$rating"}, "count": {"$sum": 1}}},
+    ]
+    out = {}
+    async for row in db.reviews.aggregate(pipeline):
+        out[row["_id"]] = {"avg": round(row["avg"], 1), "count": row["count"]}
+    return out
+
+@api_router.get("/reviews/all")
+async def list_all_reviews(user: dict = Depends(get_current_user)):
+    reviews = await db.reviews.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return reviews
+
+@api_router.put("/reviews/{review_id}/approve")
+async def approve_review(review_id: str, user: dict = Depends(get_current_user)):
+    res = await db.reviews.update_one({"id": review_id}, {"$set": {"status": "approved"}})
+    if res.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Recenze nenalezena")
+    return {"message": "Schváleno"}
+
+@api_router.put("/reviews/{review_id}/reply")
+async def reply_review(review_id: str, body: ReplyBody, user: dict = Depends(get_current_user)):
+    res = await db.reviews.update_one({"id": review_id}, {"$set": {"reply": body.reply}})
+    if res.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Recenze nenalezena")
+    return {"message": "Odpověď uložena"}
+
+@api_router.delete("/reviews/{review_id}")
+async def delete_review(review_id: str, user: dict = Depends(get_current_user)):
+    await db.reviews.delete_one({"id": review_id})
+    return {"message": "Smazáno"}
 
 app.include_router(api_router)
 
@@ -422,6 +505,8 @@ async def startup():
     await db.users.create_index("email", unique=True)
     await db.properties.create_index("id", unique=True)
     await db.agents.create_index("id", unique=True)
+    await db.reviews.create_index("id", unique=True)
+    await db.reviews.create_index([("status", 1), ("agent_id", 1)])
     # Admin seed
     admin_email = os.environ.get("ADMIN_EMAIL", "admin@example.com").lower()
     admin_password = os.environ.get("ADMIN_PASSWORD", "admin123")
