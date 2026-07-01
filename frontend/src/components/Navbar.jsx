@@ -55,7 +55,7 @@ export const Navbar = () => {
               );
             })}
             <Link
-              to="/kontakt"
+              to="/prodej"
               data-testid="nav-cta-sell"
               className="bg-[#003DA5] hover:bg-[#002b75] text-white font-bold py-2.5 px-5 text-sm uppercase tracking-wider transition-colors"
             >
@@ -87,7 +87,7 @@ export const Navbar = () => {
             </Link>
           ))}
           <Link
-            to="/kontakt"
+            to="/prodej"
             className="block mt-3 text-center bg-[#003DA5] text-white font-bold py-3 uppercase tracking-wider"
           >
             Prodat nemovitost

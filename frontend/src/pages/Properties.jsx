@@ -9,6 +9,9 @@ export default function Properties() {
   const [type, setType] = useState("");
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [locationQuery, setLocationQuery] = useState("");
+  const [priceMin, setPriceMin] = useState("");
+  const [priceMax, setPriceMax] = useState("");
   const PER_PAGE = 12;
 
   useEffect(() => {
@@ -23,12 +26,30 @@ export default function Properties() {
     });
   }, [deal, type]);
 
-  const totalPages = Math.ceil(properties.length / PER_PAGE);
-  const paged = properties.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+  const norm = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const filtered = properties.filter((p) => {
+    if (locationQuery && !norm(p.location).includes(norm(locationQuery))) return false;
+    if (priceMin && p.price < Number(priceMin)) return false;
+    if (priceMax && p.price > Number(priceMax)) return false;
+    return true;
+  });
+
+  useEffect(() => {
+    setPage(1);
+  }, [locationQuery, priceMin, priceMax]);
+
+  const totalPages = Math.ceil(filtered.length / PER_PAGE);
+  const paged = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
+
+  const resetSearch = () => {
+    setLocationQuery("");
+    setPriceMin("");
+    setPriceMax("");
+  };
 
   const FilterBtn = ({ active, onClick, children, testid }) => (
     <button
@@ -64,17 +85,58 @@ export default function Properties() {
               <FilterBtn key={k} active={type === k} onClick={() => setType(k)} testid={`filter-type-${k}`}>{v}</FilterBtn>
             ))}
           </div>
+
+          {/* Search by location + price */}
+          <div className="bg-[#F9FAFB] border border-gray-200 p-4 grid grid-cols-1 md:grid-cols-4 gap-3 mt-2">
+            <div className="md:col-span-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-[#0A0A0A]">Lokalita</label>
+              <input
+                value={locationQuery}
+                onChange={(e) => setLocationQuery(e.target.value)}
+                placeholder="např. Tachov, Planá…"
+                data-testid="search-location"
+                className="mt-1.5 w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:border-[#003DA5]"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-bold uppercase tracking-wider text-[#0A0A0A]">Cena od</label>
+              <input
+                type="number"
+                value={priceMin}
+                onChange={(e) => setPriceMin(e.target.value)}
+                placeholder="0"
+                data-testid="search-price-min"
+                className="mt-1.5 w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:border-[#003DA5]"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-bold uppercase tracking-wider text-[#0A0A0A]">Cena do</label>
+              <input
+                type="number"
+                value={priceMax}
+                onChange={(e) => setPriceMax(e.target.value)}
+                placeholder="bez limitu"
+                data-testid="search-price-max"
+                className="mt-1.5 w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:border-[#003DA5]"
+              />
+            </div>
+            {(locationQuery || priceMin || priceMax) && (
+              <button onClick={resetSearch} data-testid="search-reset" className="md:col-span-4 justify-self-start text-sm font-bold text-[#DC1C2E] hover:underline">
+                Zrušit vyhledávání ✕
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="mt-10">
           {loading ? (
             <p className="text-gray-500">Načítání…</p>
-          ) : properties.length === 0 ? (
+          ) : filtered.length === 0 ? (
             <p className="text-gray-500" data-testid="properties-empty">Žádné nemovitosti neodpovídají filtru.</p>
           ) : (
             <>
               <p className="text-sm text-gray-500 mb-6" data-testid="properties-count">
-                Zobrazeno {paged.length} z {properties.length} nemovitostí
+                Zobrazeno {paged.length} z {filtered.length} nemovitostí
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="properties-grid">
                 {paged.map((p) => (

@@ -59,7 +59,7 @@ export const PropertyCard = ({ property }) => {
 
         <div className="mt-auto pt-4 flex items-center justify-between">
           <span className="font-display font-black text-xl text-[#003DA5]">
-            {formatPrice(property.price, property.currency, property.deal_type)}
+            {property.price_note || formatPrice(property.price, property.currency, property.deal_type)}
           </span>
           <span className="text-xs font-bold uppercase tracking-wider text-[#DC1C2E] group-hover:translate-x-1 transition-transform">
             Detail →

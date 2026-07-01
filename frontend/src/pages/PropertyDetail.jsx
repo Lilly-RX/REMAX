@@ -82,7 +82,7 @@ export default function PropertyDetail() {
             <p className="flex items-center gap-2 text-gray-500 mt-2"><MapPin size={18} /> {property.location}</p>
 
             <div className="font-display text-3xl font-black text-[#003DA5] mt-6">
-              {formatPrice(property.price, property.currency, property.deal_type)}
+              {property.price_note || formatPrice(property.price, property.currency, property.deal_type)}
             </div>
 
             <div className="flex flex-wrap gap-6 mt-6 py-6 border-y border-gray-200 text-gray-700">

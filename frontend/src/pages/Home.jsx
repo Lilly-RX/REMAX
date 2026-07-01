@@ -109,7 +109,7 @@ export default function Home() {
             <p className="text-gray-600 mt-2 max-w-xl">Připravíme bezplatné tržní ocenění a postaráme se o celý prodej za vás.</p>
           </div>
           <Link
-            to="/kontakt"
+            to="/prodej"
             data-testid="home-cta-sell"
             className="whitespace-nowrap bg-[#DC1C2E] hover:bg-[#a31522] text-white font-bold py-4 px-8 uppercase tracking-wider transition-colors"
           >

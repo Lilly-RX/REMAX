@@ -31,9 +31,10 @@ export const MessagesPanel = () => {
             <div key={m.id} className={`bg-white border p-5 ${m.is_read ? "border-gray-200" : "border-[#003DA5] border-l-4"}`} data-testid={`message-${m.id}`}>
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     {!m.is_read && <Circle size={8} className="fill-[#DC1C2E] text-[#DC1C2E]" />}
                     <span className="font-bold text-[#0A0A0A]">{m.name}</span>
+                    {m.subject && <span className="text-xs bg-[#003DA5]/10 text-[#003DA5] font-bold px-2 py-0.5">{m.subject}</span>}
                     <span className="text-xs text-gray-400">{new Date(m.created_at).toLocaleString("cs-CZ")}</span>
                   </div>
                   <div className="flex flex-wrap gap-4 mt-1 text-sm text-gray-600">

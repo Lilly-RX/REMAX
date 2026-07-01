@@ -9,6 +9,7 @@ import Team from "@/pages/Team";
 import Properties from "@/pages/Properties";
 import PropertyDetail from "@/pages/PropertyDetail";
 import Contact from "@/pages/Contact";
+import Sell from "@/pages/Sell";
 import Login from "@/admin/Login";
 import Dashboard from "@/admin/Dashboard";
 import ProtectedRoute from "@/admin/ProtectedRoute";
@@ -26,6 +27,7 @@ function App() {
             <Route path="/nemovitosti" element={<Properties />} />
             <Route path="/nemovitosti/:id" element={<PropertyDetail />} />
             <Route path="/kontakt" element={<Contact />} />
+            <Route path="/prodej" element={<Sell />} />
           </Route>
           <Route path="/admin/login" element={<Login />} />
           <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

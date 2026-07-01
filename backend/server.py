@@ -165,6 +165,7 @@ class ContactMessage(BaseModel):
     email: str
     phone: str = ""
     message: str
+    subject: str = "Kontaktní formulář"
     property_id: Optional[str] = None
     is_read: bool = False
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
@@ -174,6 +175,7 @@ class ContactCreate(BaseModel):
     email: EmailStr
     phone: str = ""
     message: str
+    subject: str = "Kontaktní formulář"
     property_id: Optional[str] = None
 
 # ---------------- Auth routes ----------------
@@ -296,6 +298,7 @@ def send_notification_email(msg: ContactMessage):
         resend.api_key = api_key
         html = f"""
         <h2>Nová zpráva z webu RE/MAX Active Broker</h2>
+        <p><strong>Předmět:</strong> {msg.subject}</p>
         <p><strong>Jméno:</strong> {msg.name}</p>
         <p><strong>E-mail:</strong> {msg.email}</p>
         <p><strong>Telefon:</strong> {msg.phone}</p>
@@ -306,7 +309,7 @@ def send_notification_email(msg: ContactMessage):
         resend.Emails.send({
             "from": os.environ.get("SENDER_EMAIL", "onboarding@resend.dev"),
             "to": [os.environ.get("OFFICE_EMAIL", "info@remaxactivebroker.cz")],
-            "subject": f"Nová poptávka od {msg.name}",
+            "subject": f"{msg.subject} – {msg.name}",
             "html": html})
     except Exception as e:
         logger.error(f"Email send failed: {e}")
