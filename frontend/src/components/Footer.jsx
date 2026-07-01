@@ -39,7 +39,7 @@ export const Footer = () => {
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={16} className="text-[#003DA5]" />
-                <a href="mailto:info.remax-activebroker@seznam.cz" className="hover:text-white">info.remax-activebroker@seznam.cz</a>
+                <a href="mailto:info@remaxactivebroker.cz" className="hover:text-white">info@remaxactivebroker.cz</a>
               </li>
             </ul>
           </div>
