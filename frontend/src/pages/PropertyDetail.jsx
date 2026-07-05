@@ -68,7 +68,7 @@ export default function PropertyDetail() {
             <div className="flex gap-3 mt-3 overflow-x-auto scrollbar-hide">
               {images.map((img, i) => (
                 <button key={i} onClick={() => setActive(i)} className={`w-24 h-20 flex-shrink-0 overflow-hidden border-2 ${active === i ? "border-[#003DA5]" : "border-transparent"}`}>
-                  <img src={mediaUrl(img)} alt="" className="w-full h-full object-cover" />
+                  <img src={mediaUrl(img)} alt="" loading="lazy" className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>

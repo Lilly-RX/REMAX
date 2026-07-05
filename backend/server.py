@@ -245,7 +245,11 @@ async def download(path: str):
     if not record:
         raise HTTPException(status_code=404, detail="Soubor nenalezen")
     data, content_type = await asyncio.to_thread(get_object, path)
-    return StarletteResponse(content=data, media_type=record.get("content_type", content_type))
+    return StarletteResponse(
+        content=data,
+        media_type=record.get("content_type", content_type),
+        headers={"Cache-Control": "public, max-age=31536000, immutable"},
+    )
 
 # ---------------- Agents routes ----------------
 @api_router.get("/agents")
