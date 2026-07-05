@@ -192,10 +192,10 @@ class ReviewModel(BaseModel):
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 class ReviewCreate(BaseModel):
-    author_name: str
+    author_name: str = Field(..., min_length=1, max_length=80)
     email: str = ""
-    rating: int = 5
-    text: str
+    rating: int = Field(5, ge=1, le=5)
+    text: str = Field(..., min_length=1, max_length=2000)
     target_type: str = "office"
     agent_id: Optional[str] = None
     deal_type: str = ""

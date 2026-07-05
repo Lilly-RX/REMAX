@@ -42,5 +42,7 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
 - P2: Rate-limiting / brute-force protection on /auth/login.
 
 ## Next Tasks
+- Reviews (2026-07-01): client reviews with 1-5 stars, target office or specific agent, admin moderation/approval, admin replies; shown on /recenze, per-agent rating on /tym, testimonials on homepage.
+- Also added earlier: Sell/rent form (/prodej), Properties search (location + price range) + pagination, 73 real properties imported from remax-czech.cz, real agents (4) + logo + team hero.
 1. Collect & wire Resend key to activate contact email.
 2. User uploads real branding (logo image) and agent/property photos.
