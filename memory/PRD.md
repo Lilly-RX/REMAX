@@ -80,6 +80,15 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
 - Verified: /nemovitosti?deal=prodej&type=byt&location=Tachov activates PRODEJ+BYT chips, pre-fills
   location, shows "Zobrazeno 4 z 4 nemovitostí". Quick-search UI renders correctly below hero.
 
+## Fixes (2026-07-22 pt.2)
+- Sorting bug: all 73 properties imported in one batch (created_at = scrape order, inverse of source
+  newest-first). Reversed created_at across existing properties (fix_dates.py) so "Nejnovější" (created_at
+  desc) = truly newest; semantics stay correct for future additions. Re-exported seed_data.json.
+- Logo: removed baked-in white background from /public/remax-logo.png non-destructively via edge
+  flood-fill (PIL) → transparent bg, black text + colored balloon preserved (corners alpha=0, text alpha=255).
+- Startup hardened: index creation, admin seed, data seed, and storage init each wrapped in try/except
+  so no single failure aborts startup (prevents "all APIs empty" symptom). Added seed-check log line.
+
 ## Fix (2026-07-22) — Production empty DB self-seeding
 - Problem: Deployed production showed EMPTY properties/team — production has its own fresh MongoDB
   and the real data (4 agents + 73 imported properties) lived only in the preview DB (not migrated on deploy).

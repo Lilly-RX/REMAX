@@ -506,53 +506,77 @@ SEED_PROPERTIES = [
 
 @app.on_event("startup")
 async def startup():
-    # Indexes
-    await db.users.create_index("email", unique=True)
-    await db.properties.create_index("id", unique=True)
-    await db.agents.create_index("id", unique=True)
-    await db.reviews.create_index("id", unique=True)
-    await db.reviews.create_index([("status", 1), ("agent_id", 1)])
+    # Indexes (defensive: a failed index creation must not abort startup / take down all APIs)
+    index_specs = [
+        (db.users, "email", {"unique": True}),
+        (db.properties, "id", {"unique": True}),
+        (db.agents, "id", {"unique": True}),
+        (db.reviews, "id", {"unique": True}),
+    ]
+    for coll, key, opts in index_specs:
+        try:
+            await coll.create_index(key, **opts)
+        except Exception as e:
+            logger.error(f"Index create failed on {coll.name}.{key}: {e}")
+    try:
+        await db.reviews.create_index([("status", 1), ("agent_id", 1)])
+    except Exception as e:
+        logger.error(f"Index create failed on reviews compound: {e}")
+
     # Admin seed
-    admin_email = os.environ.get("ADMIN_EMAIL", "admin@example.com").lower()
-    admin_password = os.environ.get("ADMIN_PASSWORD", "admin123")
-    existing = await db.users.find_one({"email": admin_email})
-    if existing is None:
-        await db.users.insert_one({"email": admin_email, "password_hash": hash_password(admin_password),
-                                   "name": "Admin", "role": "admin",
-                                   "created_at": datetime.now(timezone.utc).isoformat()})
-    elif not verify_password(admin_password, existing["password_hash"]):
-        await db.users.update_one({"email": admin_email}, {"$set": {"password_hash": hash_password(admin_password)}})
+    try:
+        admin_email = os.environ.get("ADMIN_EMAIL", "admin@example.com").lower()
+        admin_password = os.environ.get("ADMIN_PASSWORD", "admin123")
+        existing = await db.users.find_one({"email": admin_email})
+        if existing is None:
+            await db.users.insert_one({"email": admin_email, "password_hash": hash_password(admin_password),
+                                       "name": "Admin", "role": "admin",
+                                       "created_at": datetime.now(timezone.utc).isoformat()})
+        elif not verify_password(admin_password, existing["password_hash"]):
+            await db.users.update_one({"email": admin_email}, {"$set": {"password_hash": hash_password(admin_password)}})
+    except Exception as e:
+        logger.error(f"Admin seed failed: {e}")
+
     # Seed real content into an empty database (production / any fresh env).
     # Real data lives in seed_data.json (agents, properties, file records).
-    seed_file = ROOT_DIR / "seed_data.json"
-    bundle = None
-    if seed_file.exists():
-        try:
-            bundle = json.loads(seed_file.read_text(encoding="utf-8"))
-        except Exception as e:
-            logger.error(f"Failed to read seed_data.json: {e}")
+    try:
+        seed_file = ROOT_DIR / "seed_data.json"
+        bundle = None
+        if seed_file.exists():
+            try:
+                bundle = json.loads(seed_file.read_text(encoding="utf-8"))
+            except Exception as e:
+                logger.error(f"Failed to read seed_data.json: {e}")
 
-    if bundle and bundle.get("agents"):
-        if await db.agents.count_documents({}) == 0:
-            await db.agents.insert_many(bundle["agents"])
-            logger.info(f"Seeded {len(bundle['agents'])} agents from bundle")
-        if await db.properties.count_documents({}) == 0 and bundle.get("properties"):
-            await db.properties.insert_many(bundle["properties"])
-            logger.info(f"Seeded {len(bundle['properties'])} properties from bundle")
-        if await db.files.count_documents({}) == 0 and bundle.get("files"):
-            await db.files.insert_many(bundle["files"])
-            logger.info(f"Seeded {len(bundle['files'])} file records from bundle")
-    elif await db.agents.count_documents({}) == 0:
-        # Fallback placeholder seed (only when no real data bundle is present)
-        agent_ids = []
-        for i, a in enumerate(SEED_AGENTS):
-            agent = AgentModel(**a, photo_url=SEED_TEAM_PHOTOS[i])
-            await db.agents.insert_one(agent.model_dump())
-            agent_ids.append(agent.id)
-        for i, p in enumerate(SEED_PROPERTIES):
-            prop = PropertyModel(**p, images=[SEED_PROP_IMAGES[i % len(SEED_PROP_IMAGES)]],
-                                 agent_id=agent_ids[i % len(agent_ids)])
-            await db.properties.insert_one(prop.model_dump())
+        agents_count = await db.agents.count_documents({})
+        props_count = await db.properties.count_documents({})
+        files_count = await db.files.count_documents({})
+        logger.info(f"Seed check -> agents={agents_count} properties={props_count} files={files_count} bundle={'yes' if bundle else 'no'}")
+
+        if bundle and bundle.get("agents"):
+            if agents_count == 0:
+                await db.agents.insert_many(bundle["agents"])
+                logger.info(f"Seeded {len(bundle['agents'])} agents from bundle")
+            if props_count == 0 and bundle.get("properties"):
+                await db.properties.insert_many(bundle["properties"])
+                logger.info(f"Seeded {len(bundle['properties'])} properties from bundle")
+            if files_count == 0 and bundle.get("files"):
+                await db.files.insert_many(bundle["files"])
+                logger.info(f"Seeded {len(bundle['files'])} file records from bundle")
+        elif agents_count == 0:
+            # Fallback placeholder seed (only when no real data bundle is present)
+            agent_ids = []
+            for i, a in enumerate(SEED_AGENTS):
+                agent = AgentModel(**a, photo_url=SEED_TEAM_PHOTOS[i])
+                await db.agents.insert_one(agent.model_dump())
+                agent_ids.append(agent.id)
+            for i, p in enumerate(SEED_PROPERTIES):
+                prop = PropertyModel(**p, images=[SEED_PROP_IMAGES[i % len(SEED_PROP_IMAGES)]],
+                                     agent_id=agent_ids[i % len(agent_ids)])
+                await db.properties.insert_one(prop.model_dump())
+    except Exception as e:
+        logger.error(f"Data seed failed: {e}")
+
     # Storage
     try:
         init_storage()
