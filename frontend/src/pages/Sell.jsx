@@ -46,7 +46,7 @@ export default function Sell() {
     }
   };
 
-  const inp = "w-full border border-gray-300 px-3 py-3 text-sm focus:outline-none focus:border-[#003DA5]";
+  const inp = "w-full border border-gray-300 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#003DA5]";
   const lbl = "text-xs font-bold uppercase tracking-wider text-[#0A0A0A]";
 
   return (
@@ -119,7 +119,7 @@ export default function Sell() {
               <label className={lbl}>Popis nemovitosti / poznámka</label>
               <textarea rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Stručně popište nemovitost, stav, počet místností…" data-testid="sell-message" className={`mt-1.5 ${inp} resize-none`} />
             </div>
-            <button type="submit" disabled={sending} data-testid="sell-submit-btn" className="inline-flex items-center gap-2 bg-[#DC1C2E] hover:bg-[#a31522] disabled:opacity-60 text-white font-bold py-4 px-8 uppercase tracking-wider transition-colors">
+            <button type="submit" disabled={sending} data-testid="sell-submit-btn" className="inline-flex items-center gap-2 bg-[#DC1C2E] hover:bg-[#a31522] disabled:opacity-60 text-white font-bold py-4 px-8 rounded-full shadow-lg shadow-red-900/20 hover:scale-[1.03] transition">
               <Send size={18} /> {sending ? "Odesílání…" : "Odeslat poptávku"}
             </button>
           </form>
@@ -132,7 +132,7 @@ export default function Sell() {
             { icon: ShieldCheck, title: "Bezpečnost transakce", text: "Právní servis, ověřené smlouvy a advokátní úschova peněz." },
             { icon: Clock, title: "Ušetříme váš čas", text: "Postaráme se o prohlídky, inzerci i administrativu za vás." },
           ].map((b, i) => (
-            <div key={i} className="border border-gray-200 p-6" data-testid={`sell-benefit-${i}`}>
+            <div key={i} className="border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6" data-testid={`sell-benefit-${i}`}>
               <b.icon className="text-[#003DA5] mb-3" size={26} />
               <h3 className="font-display font-bold text-lg text-[#0A0A0A]">{b.title}</h3>
               <p className="text-sm text-gray-600 mt-1">{b.text}</p>

@@ -55,7 +55,7 @@ export default function Properties() {
     <button
       onClick={onClick}
       data-testid={testid}
-      className={`px-4 py-2 text-sm font-bold uppercase tracking-wider transition-colors border ${
+      className={`px-4 py-2 text-sm font-bold uppercase tracking-wider rounded-full transition-colors border ${
         active ? "bg-[#003DA5] text-white border-[#003DA5]" : "bg-white text-[#0A0A0A] border-gray-300 hover:border-[#003DA5]"
       }`}
     >
@@ -87,7 +87,7 @@ export default function Properties() {
           </div>
 
           {/* Search by location + price */}
-          <div className="bg-[#F9FAFB] border border-gray-200 p-4 grid grid-cols-1 md:grid-cols-4 gap-3 mt-2">
+          <div className="bg-[#F9FAFB] border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-4 grid grid-cols-1 md:grid-cols-4 gap-3 mt-2">
             <div className="md:col-span-2">
               <label className="text-xs font-bold uppercase tracking-wider text-[#0A0A0A]">Lokalita</label>
               <input
@@ -95,7 +95,7 @@ export default function Properties() {
                 onChange={(e) => setLocationQuery(e.target.value)}
                 placeholder="např. Tachov, Planá…"
                 data-testid="search-location"
-                className="mt-1.5 w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:border-[#003DA5]"
+                className="mt-1.5 w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#003DA5]"
               />
             </div>
             <div>
@@ -106,7 +106,7 @@ export default function Properties() {
                 onChange={(e) => setPriceMin(e.target.value)}
                 placeholder="0"
                 data-testid="search-price-min"
-                className="mt-1.5 w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:border-[#003DA5]"
+                className="mt-1.5 w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#003DA5]"
               />
             </div>
             <div>
@@ -117,7 +117,7 @@ export default function Properties() {
                 onChange={(e) => setPriceMax(e.target.value)}
                 placeholder="bez limitu"
                 data-testid="search-price-max"
-                className="mt-1.5 w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:border-[#003DA5]"
+                className="mt-1.5 w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#003DA5]"
               />
             </div>
             {(locationQuery || priceMin || priceMax) && (
@@ -150,7 +150,7 @@ export default function Properties() {
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={page === 1}
                     data-testid="page-prev"
-                    className="px-4 py-2 text-sm font-bold border border-gray-300 disabled:opacity-40 hover:border-[#003DA5] transition-colors"
+                    className="px-4 py-2 text-sm font-bold border border-gray-300 rounded-full disabled:opacity-40 hover:border-[#003DA5] transition-colors"
                   >
                     ← Předchozí
                   </button>
@@ -159,7 +159,7 @@ export default function Properties() {
                       key={n}
                       onClick={() => setPage(n)}
                       data-testid={`page-${n}`}
-                      className={`w-10 h-10 text-sm font-bold border transition-colors ${
+                      className={`w-10 h-10 text-sm font-bold border rounded-lg transition-colors ${
                         page === n ? "bg-[#003DA5] text-white border-[#003DA5]" : "border-gray-300 hover:border-[#003DA5]"
                       }`}
                     >
@@ -170,7 +170,7 @@ export default function Properties() {
                     onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                     disabled={page === totalPages}
                     data-testid="page-next"
-                    className="px-4 py-2 text-sm font-bold border border-gray-300 disabled:opacity-40 hover:border-[#003DA5] transition-colors"
+                    className="px-4 py-2 text-sm font-bold border border-gray-300 rounded-full disabled:opacity-40 hover:border-[#003DA5] transition-colors"
                   >
                     Další →
                   </button>

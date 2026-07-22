@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Search, Home as HomeIcon, Award, Users, MapPin } from "lucide-react";
+import { ArrowRight, Search, Home as HomeIcon, Award, Users, MapPin, ShieldCheck } from "lucide-react";
 import api from "@/lib/api";
 import { PropertyCard } from "@/components/PropertyCard";
 import { StarRating } from "@/components/StarRating";
@@ -34,9 +34,17 @@ export default function Home() {
           style={{ animationDelay: "0.15s" }}
         />
 
+        <div className="hidden sm:flex absolute bottom-8 left-4 sm:left-8 z-30 items-center gap-3 bg-white/90 backdrop-blur-md rounded-full pl-3 pr-5 py-2.5 shadow-xl shadow-black/10 border border-white/50 animate-fade-up" style={{ animationDelay: "0.35s" }} data-testid="hero-trust-badge">
+          <span className="w-9 h-9 rounded-full bg-[#003DA5] text-white flex items-center justify-center"><Award size={18} /></span>
+          <div className="leading-tight">
+            <div className="text-sm font-bold text-[#0A0A0A]">17 let zkušeností</div>
+            <div className="text-xs text-gray-500">Ověřená kancelář RE/MAX v Tachově</div>
+          </div>
+        </div>
+
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 md:py-40">
           <div className="max-w-xl animate-fade-up">
-            <div className="inline-flex items-center gap-2 bg-[#DC1C2E]/10 text-[#DC1C2E] text-xs font-bold uppercase tracking-[0.2em] px-4 py-2 mb-6">
+            <div className="inline-flex items-center gap-2 bg-[#DC1C2E]/10 text-[#DC1C2E] text-xs font-bold uppercase tracking-[0.2em] px-4 py-2 rounded-full mb-6">
               <MapPin size={14} /> Realitní kancelář v Tachově
             </div>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-[#0A0A0A] leading-[1.05]">
@@ -50,14 +58,14 @@ export default function Home() {
               <Link
                 to="/kontakt"
                 data-testid="hero-cta-contact"
-                className="inline-flex items-center justify-center gap-2 bg-[#003DA5] hover:bg-[#002b75] text-white font-bold py-4 px-8 uppercase tracking-wider transition-colors"
+                className="inline-flex items-center justify-center gap-2 bg-[#003DA5] hover:bg-[#002b75] text-white font-bold py-4 px-8 rounded-full shadow-lg shadow-blue-900/20 hover:scale-[1.03] transition"
               >
                 Kontaktujte nás <ArrowRight size={18} />
               </Link>
               <Link
                 to="/nemovitosti"
                 data-testid="hero-cta-listings"
-                className="inline-flex items-center justify-center gap-2 border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white font-bold py-4 px-8 uppercase tracking-wider transition-colors bg-white/70"
+                className="inline-flex items-center justify-center gap-2 border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white font-bold py-4 px-8 rounded-full transition bg-white/70 backdrop-blur"
               >
                 <Search size={18} /> Prohlédnout nabídku
               </Link>
@@ -77,7 +85,7 @@ export default function Home() {
           ].map((s, i) => (
             <div key={i} data-testid={`stat-${i}`}>
               <s.icon className="mx-auto mb-3 text-[#DC1C2E]" size={28} />
-              <div className="font-display text-3xl md:text-4xl font-black">{s.value}</div>
+              <div className="font-display text-4xl md:text-5xl font-black">{s.value}</div>
               <div className="text-sm text-blue-200 mt-1">{s.label}</div>
             </div>
           ))}
@@ -119,7 +127,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {reviews.map((r) => (
-                <div key={r.id} className="bg-white/10 backdrop-blur border border-white/15 p-6" data-testid={`home-review-${r.id}`}>
+                <div key={r.id} className="bg-white/10 backdrop-blur border border-white/15 rounded-2xl p-6" data-testid={`home-review-${r.id}`}>
                   <StarRating value={r.rating} size={16} />
                   <p className="text-blue-50 mt-4 leading-relaxed line-clamp-5">„{r.text}"</p>
                   <div className="mt-5 pt-4 border-t border-white/15 font-bold">{r.author_name}</div>
@@ -130,17 +138,22 @@ export default function Home() {
         </section>
       )}
 
-      {/* CTA band */}
-      <section className="bg-[#F9FAFB] border-y border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div>
-            <h2 className="font-display text-3xl font-bold text-[#0A0A0A]">Chcete prodat svou nemovitost?</h2>
-            <p className="text-gray-600 mt-2 max-w-xl">Připravíme bezplatné tržní ocenění a postaráme se o celý prodej za vás.</p>
+      {/* CTA ribbon */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#003DA5] to-[#002870] text-white shadow-2xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="absolute -right-10 -top-10 w-52 h-52 bg-white/5 rounded-full" />
+          <div className="absolute -right-24 bottom-0 w-72 h-72 bg-[#DC1C2E]/10 rounded-full blur-2xl" />
+          <div className="relative flex items-start gap-5">
+            <span className="hidden sm:flex w-14 h-14 flex-shrink-0 items-center justify-center rounded-2xl bg-white/10"><ShieldCheck size={28} className="text-white" /></span>
+            <div>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold">Chcete prodat svou nemovitost?</h2>
+              <p className="text-blue-100 mt-2 max-w-xl">Připravíme bezplatné tržní ocenění a postaráme se o celý prodej za vás – rychle, bezpečně a s osobním přístupem.</p>
+            </div>
           </div>
           <Link
             to="/prodej"
             data-testid="home-cta-sell"
-            className="whitespace-nowrap bg-[#DC1C2E] hover:bg-[#a31522] text-white font-bold py-4 px-8 uppercase tracking-wider transition-colors"
+            className="relative whitespace-nowrap bg-[#DC1C2E] hover:bg-[#a31522] text-white font-bold py-4 px-8 rounded-full shadow-lg shadow-red-900/30 hover:scale-[1.03] transition"
           >
             Prodat nemovitost
           </Link>

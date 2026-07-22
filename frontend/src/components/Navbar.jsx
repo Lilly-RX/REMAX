@@ -58,7 +58,7 @@ export const Navbar = () => {
             <Link
               to="/prodej"
               data-testid="nav-cta-sell"
-              className="bg-[#003DA5] hover:bg-[#002b75] text-white font-bold py-2.5 px-5 text-sm uppercase tracking-wider transition-colors"
+              className="bg-[#003DA5] hover:bg-[#002b75] text-white font-bold py-2.5 px-5 text-sm uppercase tracking-wider rounded-full shadow-md shadow-blue-900/20 hover:scale-[1.04] transition"
             >
               Prodat nemovitost
             </Link>
@@ -89,7 +89,7 @@ export const Navbar = () => {
           ))}
           <Link
             to="/prodej"
-            className="block mt-3 text-center bg-[#003DA5] text-white font-bold py-3 uppercase tracking-wider"
+            className="block mt-3 text-center bg-[#003DA5] text-white font-bold py-3 uppercase tracking-wider rounded-full"
           >
             Prodat nemovitost
           </Link>

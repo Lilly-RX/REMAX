@@ -9,7 +9,7 @@ export const PropertyCard = ({ property }) => {
     <Link
       to={`/nemovitosti/${property.id}`}
       data-testid={`property-card-${property.id}`}
-      className="group bg-white border border-gray-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col"
+      className="group bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_14px_44px_rgb(0,0,0,0.10)] hover:-translate-y-1 transition duration-300 overflow-hidden flex flex-col"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
         {img ? (
@@ -23,16 +23,16 @@ export const PropertyCard = ({ property }) => {
           <div className="w-full h-full flex items-center justify-center text-gray-300">Bez fotografie</div>
         )}
         <div className="absolute top-3 left-3 flex gap-2">
-          <span className="bg-[#003DA5] text-white text-xs font-bold px-3 py-1 uppercase tracking-wide">
+          <span className="bg-[#003DA5] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
             {DEAL_TYPES[property.deal_type]}
           </span>
           {property.status !== "aktivni" && (
-            <span className="bg-[#DC1C2E] text-white text-xs font-bold px-3 py-1 uppercase tracking-wide">
+            <span className="bg-[#DC1C2E] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
               {STATUS_LABELS[property.status]}
             </span>
           )}
         </div>
-        <span className="absolute bottom-3 right-3 bg-white/90 backdrop-blur text-[#0A0A0A] text-xs font-bold px-3 py-1 uppercase tracking-wide">
+        <span className="absolute bottom-3 right-3 bg-white/90 backdrop-blur text-[#0A0A0A] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
           {PROPERTY_TYPES[property.property_type]}
         </span>
       </div>

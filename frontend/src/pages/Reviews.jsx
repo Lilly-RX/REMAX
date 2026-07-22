@@ -43,7 +43,7 @@ export default function Reviews() {
     }
   };
 
-  const inp = "w-full border border-gray-300 px-3 py-3 text-sm focus:outline-none focus:border-[#003DA5]";
+  const inp = "w-full border border-gray-300 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#003DA5]";
   const lbl = "text-xs font-bold uppercase tracking-wider text-[#0A0A0A]";
   const avg = reviews.length ? (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length) : 0;
 
@@ -74,7 +74,7 @@ export default function Reviews() {
             </div>
           ) : (
             reviews.map((r) => (
-              <div key={r.id} className="bg-white border border-gray-200 p-6" data-testid={`review-${r.id}`}>
+              <div key={r.id} className="bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6" data-testid={`review-${r.id}`}>
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <div className="font-bold text-[#0A0A0A]">{r.author_name}</div>
@@ -102,7 +102,7 @@ export default function Reviews() {
 
         {/* Form */}
         <aside className="lg:col-span-2">
-          <div className="bg-[#F9FAFB] border border-gray-200 p-6 lg:sticky lg:top-28">
+          <div className="bg-[#F9FAFB] border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 lg:sticky lg:top-28">
             <h2 className="font-display text-xl font-bold text-[#0A0A0A]">Napište recenzi</h2>
             <p className="text-sm text-gray-500 mt-1 mb-5">Recenze se zobrazí po schválení naší kanceláří.</p>
             <form onSubmit={submit} className="space-y-4" data-testid="review-form">
@@ -147,7 +147,7 @@ export default function Reviews() {
                 <label className={lbl}>Vaše recenze *</label>
                 <textarea required rows={4} value={form.text} onChange={(e) => setForm({ ...form, text: e.target.value })} data-testid="review-text" className={`mt-1.5 ${inp} resize-none`} />
               </div>
-              <button type="submit" disabled={sending} data-testid="review-submit-btn" className="w-full inline-flex items-center justify-center gap-2 bg-[#DC1C2E] hover:bg-[#a31522] disabled:opacity-60 text-white font-bold py-3 uppercase tracking-wider transition-colors">
+              <button type="submit" disabled={sending} data-testid="review-submit-btn" className="w-full inline-flex items-center justify-center gap-2 bg-[#DC1C2E] hover:bg-[#a31522] disabled:opacity-60 text-white font-bold py-3 rounded-full shadow-lg shadow-red-900/20 hover:scale-[1.02] transition">
                 <Send size={16} /> {sending ? "Odesílání…" : "Odeslat recenzi"}
               </button>
             </form>

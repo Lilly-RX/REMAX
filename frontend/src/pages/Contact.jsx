@@ -39,22 +39,22 @@ export default function Contact() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-bold uppercase tracking-wider text-[#0A0A0A]">Jméno *</label>
-                  <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} data-testid="contact-name" className="mt-1.5 w-full border border-gray-300 px-3 py-3 text-sm focus:outline-none focus:border-[#003DA5]" />
+                  <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} data-testid="contact-name" className="mt-1.5 w-full border border-gray-300 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#003DA5]" />
                 </div>
                 <div>
                   <label className="text-xs font-bold uppercase tracking-wider text-[#0A0A0A]">Telefon</label>
-                  <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} data-testid="contact-phone" className="mt-1.5 w-full border border-gray-300 px-3 py-3 text-sm focus:outline-none focus:border-[#003DA5]" />
+                  <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} data-testid="contact-phone" className="mt-1.5 w-full border border-gray-300 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#003DA5]" />
                 </div>
               </div>
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-[#0A0A0A]">E-mail *</label>
-                <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} data-testid="contact-email" className="mt-1.5 w-full border border-gray-300 px-3 py-3 text-sm focus:outline-none focus:border-[#003DA5]" />
+                <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} data-testid="contact-email" className="mt-1.5 w-full border border-gray-300 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#003DA5]" />
               </div>
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-[#0A0A0A]">Zpráva *</label>
-                <textarea required rows={6} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} data-testid="contact-message" className="mt-1.5 w-full border border-gray-300 px-3 py-3 text-sm focus:outline-none focus:border-[#003DA5] resize-none" />
+                <textarea required rows={6} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} data-testid="contact-message" className="mt-1.5 w-full border border-gray-300 rounded-lg px-3 py-3 text-sm focus:outline-none focus:border-[#003DA5] resize-none" />
               </div>
-              <button type="submit" disabled={sending} data-testid="contact-submit-btn" className="inline-flex items-center gap-2 bg-[#003DA5] hover:bg-[#002b75] disabled:opacity-60 text-white font-bold py-4 px-8 uppercase tracking-wider transition-colors">
+              <button type="submit" disabled={sending} data-testid="contact-submit-btn" className="inline-flex items-center gap-2 bg-[#003DA5] hover:bg-[#002b75] disabled:opacity-60 text-white font-bold py-4 px-8 rounded-full shadow-lg shadow-blue-900/20 hover:scale-[1.03] transition">
                 <Send size={18} /> {sending ? "Odesílání…" : "Odeslat zprávu"}
               </button>
             </form>
@@ -62,7 +62,7 @@ export default function Contact() {
 
           {/* Info + map */}
           <div className="space-y-6">
-            <div className="bg-[#F9FAFB] border border-gray-200 p-6 space-y-4">
+            <div className="bg-[#F9FAFB] border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 space-y-4">
               <div className="flex items-start gap-3">
                 <MapPin className="text-[#003DA5] mt-0.5" />
                 <div>
@@ -93,7 +93,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="border border-gray-200 overflow-hidden h-72" data-testid="contact-map">
+            <div className="border border-gray-100 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)] h-72" data-testid="contact-map">
               <iframe
                 title="Mapa Tachov"
                 width="100%"

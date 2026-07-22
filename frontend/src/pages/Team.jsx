@@ -30,7 +30,7 @@ export default function Team() {
             <div
               key={a.id}
               data-testid={`agent-card-${a.id}`}
-              className="bg-white border border-gray-200 hover:border-[#003DA5] transition-colors duration-300 overflow-hidden group"
+              className="bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_14px_44px_rgb(0,0,0,0.10)] hover:-translate-y-1 transition duration-300 overflow-hidden group"
             >
               <div className="aspect-[4/5] overflow-hidden bg-gray-100">
                 {a.photo_url ? (
