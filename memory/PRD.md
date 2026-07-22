@@ -41,6 +41,29 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
 - P2: Multi-language toggle (CZ/EN), SEO meta tags, sitemap.
 - P2: Rate-limiting / brute-force protection on /auth/login.
 
+## Implemented (2026-07-22) — Premium redesign + Sell form
+- Home.jsx full "award-worthy" redesign: kinetic dark hero (#05070E) with masked line-by-line
+  reveal + parallax team cutout, editorial marquee, animated stat counters, services tiles
+  (odhad/prodej/pronajem/konzultace linking to /prodej?typ=...), numbered manifesto, featured
+  properties, review cards, Facebook + sell CTA. Uses framer-motion + lenis smooth scroll.
+- Shared components/motion.jsx (PageHero [data-testid=page-hero] + Reveal). Applied unified dark-hero
+  premium style across ALL public pages (About, Team, Contact, Reviews, Properties, PropertyDetail, Legal, Sell).
+- PublicLayout.jsx initializes Lenis smooth scroll; `?nolenis=1` query param disables it (needed for
+  Playwright/automation scrolling). window.__lenis exposed for programmatic scroll.
+- Sell form (/prodej): added "Odhad nemovitosti" interest option (local INTEREST map, NOT in shared
+  DEAL_TYPES). Reads ?typ=prodej|pronajem|odhad to preselect (with useEffect sync on in-app nav).
+- Contact page: added office e-mail activebroker@re-max.cz (alongside info@remaxactivebroker.cz).
+- Navbar CTA changed to red pill for brand consistency.
+- Tested: testing_agent iteration_3.json — 100% frontend flows pass. Deployment health check: PASS.
+- Deployed to production: https://remax-active.emergent.host
+
+## Backlog / Open items
+- Auto-import of office listings from RE/MAX MAXIS (Poski REAL) via XML export feed. WAITING on user
+  to obtain office-wide XML feed URL from franchisee / podpora@poski.com (export.poskireal.cz). Once
+  provided: build scheduled sync (APScheduler) + admin "Synchronizovat teď" button. Fallback: periodic
+  scrape of their remax-czech.cz office page.
+- Resend still sandbox-limited (OFFICE_EMAIL routes only to verified address) — needs domain verification.
+
 ## Next Tasks
 - Reviews (2026-07-01): client reviews with 1-5 stars, target office or specific agent, admin moderation/approval, admin replies; shown on /recenze, per-agent rating on /tym, testimonials on homepage.
 - Also added earlier: Sell/rent form (/prodej), Properties search (location + price range) + pagination, 73 real properties imported from remax-czech.cz, real agents (4) + logo + team hero.
