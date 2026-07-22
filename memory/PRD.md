@@ -57,6 +57,15 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
 - Tested: testing_agent iteration_3.json — 100% frontend flows pass. Deployment health check: PASS.
 - Deployed to production: https://remax-active.emergent.host
 
+## Feature (2026-07-22) — Favorites (Oblíbené)
+- Anonymous client-side favorites via localStorage (key 'remax_favorites'). FavoritesContext provider
+  (toggleFavorite/isFavorite/count). Heart button (FavoriteButton) on property cards + detail gallery.
+- Navbar heart icon with count badge (data-testid nav-favorites / nav-favorites-count) → /oblibene page
+  (Favorites.jsx) listing saved properties (filters GET /api/properties by saved ids) + empty state.
+- Verified 100% by testing_agent (iteration_5): add/remove, badge, /oblibene list, persistence on reload,
+  detail-page heart. No bugs.
+- Note (non-blocking): cookie accept button testid is 'cookie-accept'; use ?nolenis=1 in automation.
+
 ## Feature (2026-07-22) — Sorting on Properties page
 - Added sort dropdown (data-testid=properties-sort) in the results header on /nemovitosti:
   Nejnovější / Nejstarší (by created_at) and Cena od nejnižší / od nejvyšší (by price).
