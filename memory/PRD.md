@@ -57,6 +57,12 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
 - Tested: testing_agent iteration_3.json — 100% frontend flows pass. Deployment health check: PASS.
 - Deployed to production: https://remax-active.emergent.host
 
+## Feature (2026-07-22) — Sorting on Properties page
+- Added sort dropdown (data-testid=properties-sort) in the results header on /nemovitosti:
+  Nejnovější / Nejstarší (by created_at) and Cena od nejnižší / od nejvyšší (by price).
+- Client-side sort of the filtered list before pagination; page resets to 1 on sort change.
+- Comparator logic verified deterministically (Node) across all 4 modes; UI control renders & wired to state.
+
 ## Feature (2026-07-22) — Home quick property search
 - Added a quick-search bar overlapping the bottom of the Home hero (data-testid=home-quick-search):
   Nabídka (deal), Typ nemovitosti (type), Lokalita (location) + "Hledat nemovitosti" button.

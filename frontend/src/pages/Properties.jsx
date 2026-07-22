@@ -15,6 +15,7 @@ export default function Properties() {
   const [locationQuery, setLocationQuery] = useState(searchParams.get("location") || "");
   const [priceMin, setPriceMin] = useState(searchParams.get("pmin") || "");
   const [priceMax, setPriceMax] = useState(searchParams.get("pmax") || "");
+  const [sort, setSort] = useState("newest");
   const PER_PAGE = 12;
 
   useEffect(() => {
@@ -39,10 +40,24 @@ export default function Properties() {
 
   useEffect(() => {
     setPage(1);
-  }, [locationQuery, priceMin, priceMax]);
+  }, [locationQuery, priceMin, priceMax, sort]);
 
-  const totalPages = Math.ceil(filtered.length / PER_PAGE);
-  const paged = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+  const sorted = [...filtered].sort((a, b) => {
+    switch (sort) {
+      case "price_asc":
+        return (a.price || 0) - (b.price || 0);
+      case "price_desc":
+        return (b.price || 0) - (a.price || 0);
+      case "oldest":
+        return String(a.created_at || "").localeCompare(String(b.created_at || ""));
+      case "newest":
+      default:
+        return String(b.created_at || "").localeCompare(String(a.created_at || ""));
+    }
+  });
+
+  const totalPages = Math.ceil(sorted.length / PER_PAGE);
+  const paged = sorted.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -122,9 +137,25 @@ export default function Properties() {
               <p className="text-gray-500" data-testid="properties-empty">Žádné nemovitosti neodpovídají filtru.</p>
             ) : (
               <>
-                <p className="text-sm text-gray-500 mb-6" data-testid="properties-count">
-                  Zobrazeno {paged.length} z {filtered.length} nemovitostí
-                </p>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+                  <p className="text-sm text-gray-500" data-testid="properties-count">
+                    Zobrazeno {paged.length} z {sorted.length} nemovitostí
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <label className="text-xs font-bold uppercase tracking-wider text-gray-500">Řadit:</label>
+                    <select
+                      value={sort}
+                      onChange={(e) => setSort(e.target.value)}
+                      data-testid="properties-sort"
+                      className="bg-white border border-gray-200 rounded-full px-4 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-[#003DA5]/30 focus:border-[#003DA5] transition"
+                    >
+                      <option value="newest">Nejnovější</option>
+                      <option value="oldest">Nejstarší</option>
+                      <option value="price_asc">Cena: od nejnižší</option>
+                      <option value="price_desc">Cena: od nejvyšší</option>
+                    </select>
+                  </div>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="properties-grid">
                   {paged.map((p, i) => (
                     <Reveal key={p.id} delay={(i % 3) * 0.06}>
