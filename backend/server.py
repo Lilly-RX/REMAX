@@ -14,6 +14,7 @@ from typing import List, Optional
 from datetime import datetime, timezone, timedelta
 from bson import ObjectId
 import logging
+import json
 import uuid
 import bcrypt
 import jwt
@@ -521,14 +522,33 @@ async def startup():
                                    "created_at": datetime.now(timezone.utc).isoformat()})
     elif not verify_password(admin_password, existing["password_hash"]):
         await db.users.update_one({"email": admin_email}, {"$set": {"password_hash": hash_password(admin_password)}})
-    # Seed agents
-    if await db.agents.count_documents({}) == 0:
+    # Seed real content into an empty database (production / any fresh env).
+    # Real data lives in seed_data.json (agents, properties, file records).
+    seed_file = ROOT_DIR / "seed_data.json"
+    bundle = None
+    if seed_file.exists():
+        try:
+            bundle = json.loads(seed_file.read_text(encoding="utf-8"))
+        except Exception as e:
+            logger.error(f"Failed to read seed_data.json: {e}")
+
+    if bundle and bundle.get("agents"):
+        if await db.agents.count_documents({}) == 0:
+            await db.agents.insert_many(bundle["agents"])
+            logger.info(f"Seeded {len(bundle['agents'])} agents from bundle")
+        if await db.properties.count_documents({}) == 0 and bundle.get("properties"):
+            await db.properties.insert_many(bundle["properties"])
+            logger.info(f"Seeded {len(bundle['properties'])} properties from bundle")
+        if await db.files.count_documents({}) == 0 and bundle.get("files"):
+            await db.files.insert_many(bundle["files"])
+            logger.info(f"Seeded {len(bundle['files'])} file records from bundle")
+    elif await db.agents.count_documents({}) == 0:
+        # Fallback placeholder seed (only when no real data bundle is present)
         agent_ids = []
         for i, a in enumerate(SEED_AGENTS):
             agent = AgentModel(**a, photo_url=SEED_TEAM_PHOTOS[i])
             await db.agents.insert_one(agent.model_dump())
             agent_ids.append(agent.id)
-        # Seed properties
         for i, p in enumerate(SEED_PROPERTIES):
             prop = PropertyModel(**p, images=[SEED_PROP_IMAGES[i % len(SEED_PROP_IMAGES)]],
                                  agent_id=agent_ids[i % len(agent_ids)])

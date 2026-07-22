@@ -57,6 +57,17 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
 - Tested: testing_agent iteration_3.json — 100% frontend flows pass. Deployment health check: PASS.
 - Deployed to production: https://remax-active.emergent.host
 
+## Fix (2026-07-22) — Production empty DB self-seeding
+- Problem: Deployed production showed EMPTY properties/team — production has its own fresh MongoDB
+  and the real data (4 agents + 73 imported properties) lived only in the preview DB (not migrated on deploy).
+- Fix: Exported real data (agents, properties, and the `files` collection needed by /api/files image
+  serving) to /app/backend/seed_data.json (~940KB, 2272 file records). server.py startup now seeds any
+  EMPTY collection from this bundle (independent per-collection counts); placeholder SEED_* kept only as
+  fallback when bundle missing. Images are in shared Emergent object storage (init via EMERGENT_LLM_KEY).
+- Verified: scratch fresh-DB insert of the full bundle succeeds; image storage_path resolves to file records.
+- ACTION REQUIRED BY USER: redeploy so production picks up the seed logic + bundle and self-populates.
+- Helper: /app/backend/export_seed.py (one-off re-export if data changes).
+
 ## Backlog / Open items
 - Auto-import of office listings from RE/MAX MAXIS (Poski REAL) via XML export feed. WAITING on user
   to obtain office-wide XML feed URL from franchisee / podpora@poski.com (export.poskireal.cz). Once
