@@ -57,6 +57,14 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
 - Tested: testing_agent iteration_3.json — 100% frontend flows pass. Deployment health check: PASS.
 - Deployed to production: https://remax-active.emergent.host
 
+## Feature (2026-07-22) — Home quick property search
+- Added a quick-search bar overlapping the bottom of the Home hero (data-testid=home-quick-search):
+  Nabídka (deal), Typ nemovitosti (type), Lokalita (location) + "Hledat nemovitosti" button.
+- On submit navigates to /nemovitosti with query params (deal, type, location, pmax).
+- Properties.jsx now initializes filters from URL params (deal/type/location/pmin/pmax) via useSearchParams.
+- Verified: /nemovitosti?deal=prodej&type=byt&location=Tachov activates PRODEJ+BYT chips, pre-fills
+  location, shows "Zobrazeno 4 z 4 nemovitostí". Quick-search UI renders correctly below hero.
+
 ## Fix (2026-07-22) — Production empty DB self-seeding
 - Problem: Deployed production showed EMPTY properties/team — production has its own fresh MongoDB
   and the real data (4 agents + 73 imported properties) lived only in the preview DB (not migrated on deploy).

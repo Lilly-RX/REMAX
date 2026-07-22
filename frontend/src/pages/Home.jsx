@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   motion,
   useScroll,
@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import api from "@/lib/api";
 import { PropertyCard } from "@/components/PropertyCard";
+import { DEAL_TYPES, PROPERTY_TYPES } from "@/lib/format";
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -153,8 +154,20 @@ const CHAPTERS = [
 ];
 
 export default function Home() {
+  const navigate = useNavigate();
   const [featured, setFeatured] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [q, setQ] = useState({ deal: "", type: "", location: "", priceMax: "" });
+
+  const runSearch = (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (q.deal) params.set("deal", q.deal);
+    if (q.type) params.set("type", q.type);
+    if (q.location.trim()) params.set("location", q.location.trim());
+    if (q.priceMax) params.set("pmax", q.priceMax);
+    navigate(`/nemovitosti${params.toString() ? `?${params.toString()}` : ""}`);
+  };
 
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -265,6 +278,65 @@ export default function Home() {
           </div>
         </motion.div>
       </section>
+
+      {/* ============ QUICK SEARCH ============ */}
+      <div className="relative z-30 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.form
+            onSubmit={runSearch}
+            data-testid="home-quick-search"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: EASE }}
+            className="-mt-12 md:-mt-16 bg-white rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.18)] border border-gray-100 p-4 md:p-5 grid grid-cols-1 md:grid-cols-12 gap-3 items-end"
+          >
+            <div className="md:col-span-3">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Nabídka</label>
+              <select
+                value={q.deal}
+                onChange={(e) => setQ({ ...q, deal: e.target.value })}
+                data-testid="quick-deal"
+                className="mt-1 w-full bg-[#F5F6F8] border border-gray-200 rounded-xl px-3 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#003DA5]/30 focus:border-[#003DA5] transition"
+              >
+                <option value="">Vše</option>
+                {Object.entries(DEAL_TYPES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+              </select>
+            </div>
+            <div className="md:col-span-3">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Typ nemovitosti</label>
+              <select
+                value={q.type}
+                onChange={(e) => setQ({ ...q, type: e.target.value })}
+                data-testid="quick-type"
+                className="mt-1 w-full bg-[#F5F6F8] border border-gray-200 rounded-xl px-3 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#003DA5]/30 focus:border-[#003DA5] transition"
+              >
+                <option value="">Všechny typy</option>
+                {Object.entries(PROPERTY_TYPES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+              </select>
+            </div>
+            <div className="md:col-span-3">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">Lokalita</label>
+              <input
+                value={q.location}
+                onChange={(e) => setQ({ ...q, location: e.target.value })}
+                placeholder="např. Tachov"
+                data-testid="quick-location"
+                className="mt-1 w-full bg-[#F5F6F8] border border-gray-200 rounded-xl px-3 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#003DA5]/30 focus:border-[#003DA5] transition"
+              />
+            </div>
+            <div className="md:col-span-3">
+              <button
+                type="submit"
+                data-testid="quick-search-btn"
+                className="w-full inline-flex items-center justify-center gap-2 bg-[#DC1C2E] hover:bg-[#a31522] text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-red-900/20 hover:scale-[1.02] transition-transform"
+              >
+                <Search size={18} /> Hledat nemovitosti
+              </button>
+            </div>
+          </motion.form>
+        </div>
+      </div>
 
       {/* ============ MARQUEE ============ */}
       <div className="bg-[#003DA5] text-white py-5 overflow-hidden marquee-mask">

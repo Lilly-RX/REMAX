@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import api from "@/lib/api";
 import { PropertyCard } from "@/components/PropertyCard";
 import { DEAL_TYPES, PROPERTY_TYPES } from "@/lib/format";
 import { PageHero, Reveal } from "@/components/motion";
 
 export default function Properties() {
+  const [searchParams] = useSearchParams();
   const [properties, setProperties] = useState([]);
-  const [deal, setDeal] = useState("");
-  const [type, setType] = useState("");
+  const [deal, setDeal] = useState(searchParams.get("deal") || "");
+  const [type, setType] = useState(searchParams.get("type") || "");
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [locationQuery, setLocationQuery] = useState("");
-  const [priceMin, setPriceMin] = useState("");
-  const [priceMax, setPriceMax] = useState("");
+  const [locationQuery, setLocationQuery] = useState(searchParams.get("location") || "");
+  const [priceMin, setPriceMin] = useState(searchParams.get("pmin") || "");
+  const [priceMax, setPriceMax] = useState(searchParams.get("pmax") || "");
   const PER_PAGE = 12;
 
   useEffect(() => {
