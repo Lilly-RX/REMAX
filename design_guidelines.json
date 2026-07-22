@@ -1,82 +1,130 @@
 {
-  "theme": "Light",
-  "archetype": "Archetype 4: Swiss & High-Contrast (Corporate RE/MAX Adaptation)",
-  "design_philosophy": "Authoritative, trustworthy, and functional. Uses sharp contrasts between pristine white space, deep black text, and striking RE/MAX brand colors (Royal Blue & Vibrant Red). Minimalist geometry to allow properties to shine.",
-  "colors": {
-    "background_primary": "#FFFFFF",
-    "background_secondary": "#F9FAFB",
-    "remax_blue": "#003DA5",
-    "remax_red": "#DC1C2E",
-    "text_primary": "#0A0A0A",
-    "text_secondary": "#4B5563",
-    "border": "#E5E7EB",
-    "surface": "#FFFFFF",
-    "surface_glass": "rgba(255, 255, 255, 0.8)",
-    "error": "#DC1C2E",
-    "success": "#16A34A"
-  },
-  "typography": {
-    "font_primary": "Cabinet Grotesk, sans-serif",
-    "font_secondary": "Manrope, sans-serif",
-    "hierarchy": {
-      "h1": "text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-[#0A0A0A] leading-tight",
-      "h2": "text-3xl sm:text-4xl font-bold tracking-tight text-[#0A0A0A]",
-      "h3": "text-xl sm:text-2xl font-bold text-[#0A0A0A]",
-      "body": "text-base text-[#4B5563] leading-relaxed",
-      "labels": "text-xs font-bold uppercase tracking-[0.2em] text-[#0A0A0A]"
+  "project_context": {
+    "brand": "RE/MAX Active Broker (Tachov)",
+    "goal": "Evolve visual design from sharp minimalist to premium modern (Artem Saykin aesthetic) without altering existing page structure.",
+    "fonts": {
+      "headings": "Cabinet Grotesk",
+      "body": "Manrope"
+    },
+    "colors": {
+      "primary": "#003DA5",
+      "accent": "#DC1C2E",
+      "neutral_light": [
+        "#FFFFFF",
+        "#F8F9FA",
+        "#F3F4F6"
+      ],
+      "neutral_dark": [
+        "#111827",
+        "#1F2937",
+        "#374151"
+      ]
     }
   },
-  "spacing_and_layout": {
-    "section_padding": "py-20 md:py-32",
-    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
-    "property_grid": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
-    "team_grid": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6",
-    "bento_grid": "grid grid-cols-1 md:grid-cols-8 lg:grid-cols-12 gap-8"
+  "design_tokens": {
+    "border_radius": {
+      "none": "0px",
+      "sm": "0.375rem",
+      "md": "0.5rem",
+      "lg": "0.75rem",
+      "xl": "1rem",
+      "2xl": "1.5rem",
+      "3xl": "2rem",
+      "full": "9999px"
+    },
+    "shadows": {
+      "soft": "0 4px 20px rgba(0, 0, 0, 0.05)",
+      "elevated": "0 10px 40px rgba(0, 0, 0, 0.08)",
+      "badge": "0 8px 30px rgba(0, 61, 165, 0.15)",
+      "dark_mode": "0 4px 20px rgba(0, 0, 0, 0.3)"
+    },
+    "typography_scale": {
+      "h1": "text-5xl sm:text-6xl tracking-tight font-extrabold",
+      "h2": "text-3xl sm:text-4xl tracking-tight font-bold",
+      "h3": "text-2xl sm:text-3xl font-bold",
+      "h4": "text-xl font-semibold",
+      "body_lg": "text-lg leading-relaxed",
+      "body_base": "text-base leading-relaxed",
+      "label": "text-sm tracking-wider font-semibold uppercase text-gray-500"
+    }
   },
-  "ui_components": {
+  "component_guidelines": {
     "buttons": {
-      "primary": "bg-[#003DA5] hover:bg-[#002b75] text-white font-bold py-3 px-6 rounded-none transition-colors duration-200",
-      "secondary": "bg-[#DC1C2E] hover:bg-[#a31522] text-white font-bold py-3 px-6 rounded-none transition-colors duration-200",
-      "outline": "border-2 border-[#003DA5] text-[#003DA5] hover:bg-[#003DA5] hover:text-white font-bold py-3 px-6 rounded-none transition-colors duration-200"
+      "primary": "bg-[#DC1C2E] text-white rounded-full px-8 py-3.5 font-bold shadow-lg shadow-red-500/20 hover:scale-105 hover:shadow-xl transition-all duration-300",
+      "secondary": "bg-[#003DA5] text-white rounded-full px-8 py-3.5 font-bold shadow-lg shadow-blue-500/20 hover:scale-105 hover:shadow-xl transition-all duration-300",
+      "outline": "border-2 border-[#003DA5] text-[#003DA5] rounded-full px-8 py-3.5 font-bold hover:bg-[#003DA5] hover:text-white transition-all duration-300",
+      "rules": "Never use sharp edges (0px) for buttons. Use sentence case or title case, NO aggressive all-caps for main CTAs."
     },
     "cards": {
-      "property": "bg-white border border-[#E5E7EB] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-none overflow-hidden",
-      "team": "bg-[#F9FAFB] border border-[#E5E7EB] hover:border-[#003DA5] transition-colors duration-300 rounded-none text-center p-6"
+      "base": "bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)]",
+      "image_treatment": "Images inside cards should fill the width, top edges rounded-t-2xl",
+      "content_padding": "p-6 sm:p-8"
     },
-    "glassmorphism": "backdrop-blur-xl bg-white/80 border border-white/20 shadow-sm",
-    "tags": "bg-[#F3F4F6] text-[#0A0A0A] text-xs font-bold px-3 py-1 uppercase tracking-wide"
+    "floating_trust_badge": {
+      "structure": "Flex row, items-center, gap-3",
+      "style": "bg-white/90 backdrop-blur-md rounded-full px-5 py-2.5 shadow-xl shadow-black/10 border border-white/20",
+      "icon": "Use a star icon filled with yellow (e.g., text-yellow-400 w-5 h-5)",
+      "text": "text-sm font-bold text-gray-900 (e.g., '4.6 na základě 90+ recenzí')",
+      "placement": "Absolute positioned over hero image or agent profile (e.g., bottom-left or bottom-right). Use z-10."
+    },
+    "guarantee_ribbon": {
+      "style": "bg-gradient-to-r from-[#003DA5] to-[#002870] text-white rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl relative overflow-hidden",
+      "typography": "text-xl sm:text-2xl font-bold",
+      "decoration": "Use a bold icon (Shield or Flame). Text example: 'Pokud neprodám, zaplatím vám 30 000 Kč'"
+    },
+    "stats_section": {
+      "layout": "Grid cols-2 md:grid-cols-4 gap-8 md:gap-12",
+      "number_style": "text-5xl sm:text-6xl font-black text-[#003DA5] mb-2",
+      "label_style": "text-sm sm:text-base font-semibold text-gray-600",
+      "background": "bg-white py-20"
+    }
   },
-  "media_assets": {
-    "hero": [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85"
-    ],
-    "properties": [
-      "https://images.unsplash.com/photo-1628012209120-d9db7abf7eab?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85",
-      "https://images.unsplash.com/photo-1721815693498-cc28507c0ba2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85",
-      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob3VzZSUyMGV4dGVyaW9yfGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85",
-      "https://images.unsplash.com/photo-1631679706909-1844bbd07221?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBsaXZpbmclMjByb29tJTIwYnJpZ2h0fGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85",
-      "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBsaXZpbmclMjByb29tJTIwYnJpZ2h0fGVufDB8fHx8MTc4MjQzMTc2NHww&ixlib=rb-4.1.0&q=85",
-      "https://images.pexels.com/photos/7031581/pexels-photo-7031581.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-    ],
-    "team": [
-      "https://images.unsplash.com/photo-1647580427155-0483906cb9de?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjByZWFsJTIwZXN0YXRlJTIwYWdlbnQlMjBwb3J0cmFpdCUyMHNtaWxpbmd8ZW58MHx8fHwxNzgyNDMxNzY0fDA&ixlib=rb-4.1.0&q=85",
-      "https://images.unsplash.com/photo-1772987438485-ac832640c8a5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHw0fHxwcm9mZXNzaW9uYWwlMjByZWFsJTIwZXN0YXRlJTIwYWdlbnQlMjBwb3J0cmFpdCUyMHNtaWxpbmd8ZW58MHx8fHwxNzgyNDMxNzY0fDA&ixlib=rb-4.1.0&q=85",
-      "https://images.unsplash.com/photo-1585240975858-7264fd020798?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjByZWFsJTIwZXN0YXRlJTIwYWdlbnQlMjBwb3J0cmFpdCUyMHNtaWxpbmd8ZW58MHx8fHwxNzgyNDMxNzY0fDA&ixlib=rb-4.1.0&q=85",
-      "https://images.pexels.com/photos/7641824/pexels-photo-7641824.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "https://images.unsplash.com/photo-1780733064206-4f200e41daa8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHwyfHxwcm9mZXNzaW9uYWwlMjByZWFsJTIwZXN0YXRlJTIwYWdlbnQlMjBwb3J0cmFpdCUyMHNtaWxpbmd8ZW58MHx8fHwxNzgyNDMxNzY0fDA&ixlib=rb-4.1.0&q=85"
-    ],
-    "locations": [
-      "https://images.pexels.com/photos/20670902/pexels-photo-20670902.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  "layout_and_sections": {
+    "generous_spacing": "Use py-20 or py-24 for section padding. Add breathing room between components.",
+    "alternating_rhythm": [
+      {
+        "section": "Hero",
+        "bg": "Full image with bg-black/40 overlay"
+      },
+      {
+        "section": "Stats",
+        "bg": "bg-white"
+      },
+      {
+        "section": "Featured Properties",
+        "bg": "bg-gray-50"
+      },
+      {
+        "section": "About / Value Prop",
+        "bg": "bg-[#003DA5] text-white"
+      },
+      {
+        "section": "Team / Reviews",
+        "bg": "bg-white"
+      },
+      {
+        "section": "Valuation Form",
+        "bg": "bg-gray-50"
+      }
     ]
   },
-  "specific_instructions_to_main_agent": {
-    "language": "Strictly Czech (cs). All copy, navigation, buttons, and dummy data must be in Czech.",
-    "branding_logo": "Implement the RE/MAX logo using typography styling to bypass image constraints: `<div class='flex items-center gap-1 font-black text-2xl tracking-tighter'><span class='text-[#DC1C2E]'>RE</span><span class='text-[#003DA5]'>/</span><span class='text-[#003DA5]'>MAX</span><span class='ml-2 text-sm font-bold text-gray-500 tracking-normal border-l border-gray-300 pl-2'>Active Broker</span></div>`",
-    "accessibility_and_testing": "All interactive and key informational elements MUST include `data-testid` attributes (e.g., `data-testid='contact-submit-btn'`).",
-    "icons": "Use `lucide-react`. Required icons: Home, Phone, Mail, MapPin, Search, Menu, X, ChevronRight, User, Key, Building.",
-    "homepage_hero": "Hero overlay should not obscure the image entirely. Use a gradient mask or `bg-white/20` with dark, high-contrast text block for legibility. Include a prominent CTA 'Kontaktujte nás' (Contact Us) and 'Prodat nemovitost' (Sell a Property).",
-    "about_section": "Use a Bento Grid layout (Mode A) to display local Tachov knowledge, team ethos, and stats.",
-    "admin_dashboard": "Use Shadcn components for Data Tables, Inputs, and Dialogs. The dashboard should use `bg-[#F9FAFB]` to contrast with pure white `#FFFFFF` cards. Active sidebar links should use `#003DA5` background with white text.",
-    "property_cards": "Each card must show high-res image, price prominently in `#003DA5`, beds, baths, and square meters, plus a 'Zobrazit detail' (View Detail) button."
-  }
+  "instructions_to_main_agent": [
+    "DO NOT rewrite the existing page structure, information architecture, or routing. Keep existing functional files intact, just update styling.",
+    "DO NOT change the existing text content heavily unless requested.",
+    "Update Buttons: Locate all buttons/CTAs and change their classNames to use rounded-full (pill-shaped) tokens with soft shadows. Remove uppercase text-transform.",
+    "Update Cards: Locate all property, agent, and bento cards. Replace sharp 1px borders/0-radius with rounded-2xl, soft shadow-[0_8px_30px_rgb(0,0,0,0.04)], and subtle border-gray-100.",
+    "Add Floating Badges: Implement the 'floating_trust_badge' on the Hero section image and Agent profiles as an absolute positioned element.",
+    "Add Guarantee Ribbon: Build out the ribbon using the `guarantee_ribbon` tokens provided.",
+    "Restyle Stats: Update the 'Čísla, která mluví za mě' stats section to use massive typography for numbers instead of enclosing them in bordered cards.",
+    "Apply Alternating Rhythm: Update section background classes (bg-white, bg-gray-50, bg-[#003DA5]) to create a modern pacing down the page."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Prioritize optical alignment over geometric alignment.",
+    "Never apply universal transition (transition: all), specify properties (e.g., transition-transform transition-shadow).",
+    "Do not center-align paragraphs; left-align dense content for readability.",
+    "Never use purely transparent backgrounds under text on headers/overlays; use glassmorphism (backdrop-blur-md) or dark overlays (bg-black/50).",
+    "Ensure buttons use micro-interactions (hover, active scale, focus rings).",
+    "All interactive and key informational elements MUST include a `data-testid` attribute to facilitate robust automated testing.",
+    "Use JS/JSX standard Tailwind CSS classes."
+  ]
 }
