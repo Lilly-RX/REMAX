@@ -9,7 +9,7 @@ import { PageHero, Reveal } from "@/components/motion";
 const INTEREST = {
   prodej: "Prodej",
   pronajem: "Pronájem",
-  odhad: "Odhad nemovitosti zdarma",
+  odhad: "Odhad nemovitosti",
 };
 
 export default function Sell() {
@@ -29,6 +29,13 @@ export default function Sell() {
     api.get("/agents").then((r) => setAgents(r.data)).catch(() => {});
   }, []);
 
+  useEffect(() => {
+    const typ = searchParams.get("typ");
+    if (["prodej", "pronajem", "odhad"].includes(typ)) {
+      setForm((f) => ({ ...f, deal_type: typ }));
+    }
+  }, [searchParams]);
+
   const isOdhad = form.deal_type === "odhad";
 
   const submit = async (e) => {
@@ -41,7 +48,7 @@ export default function Sell() {
       name: form.name,
       email: form.email,
       phone: form.phone,
-      subject: isOdhad ? "Poptávka: Odhad nemovitosti zdarma" : `Poptávka: ${INTEREST[form.deal_type]} nemovitosti`,
+      subject: isOdhad ? "Poptávka: Odhad nemovitosti" : `Poptávka: ${INTEREST[form.deal_type]} nemovitosti`,
       message:
         `Mám zájem o: ${INTEREST[form.deal_type]}\n` +
         `Typ nemovitosti: ${PROPERTY_TYPES[form.property_type]}\n` +
