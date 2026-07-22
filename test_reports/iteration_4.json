@@ -1,0 +1,34 @@
+{
+  "summary": "Verified HomePage StatCounter fix on mobile (390x844) and desktop (1280x900) via Playwright with ?nolenis=1. All 4 stats render real values including 'Profesionální makléři' = 4 (not 0). Mobile layout sanity confirmed across / and 5 other pages — no horizontal overflow.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_results": {
+    "mobile_stats_390x844": ["17+", "500+", "4", "100%"],
+    "desktop_stats_1280x900": ["17+", "500+", "4", "100%"],
+    "profesionalni_makleri_shows_4": true,
+    "mobile_no_horizontal_overflow": {
+      "/": true,
+      "/nemovitosti": true,
+      "/o-nas": true,
+      "/tym": true,
+      "/kontakt": true,
+      "/prodej": true
+    }
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Non-blocking: console warns 'Please ensure container has non-static position' from framer-motion useScroll — cosmetic, not affecting stats.",
+    "Non-blocking: two 401 resource errors on Home page load (likely 3rd-party asset probe); does not affect UX or stats."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (skipped)", "frontend": "100%"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "StatCounter fix in /app/frontend/src/pages/Home.jsx (safety-net 2.6s + reduced-motion handling) verified on both mobile and desktop. Use ?nolenis=1 with Playwright to bypass Lenis smooth-scroll interception."
+}

@@ -5,7 +5,7 @@ import {
   useScroll,
   useTransform,
   useInView,
-  useMotionValue,
+  useReducedMotion,
   animate,
 } from "framer-motion";
 import {
@@ -55,22 +55,36 @@ const Reveal = ({ children, delay = 0, y = 40, className = "" }) => (
   </motion.div>
 );
 
-/* Animated counter for stats */
+/* Animated counter for stats — resilient: always ends on the real value */
 const StatCounter = ({ value, suffix = "", prefix = "" }) => {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  const mv = useMotionValue(0);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const reduce = useReducedMotion();
   const [display, setDisplay] = useState(0);
 
   useEffect(() => {
+    if (reduce) {
+      setDisplay(value);
+      return;
+    }
     if (!inView) return;
-    const controls = animate(mv, value, {
+    const controls = animate(0, value, {
       duration: 1.6,
       ease: EASE,
       onUpdate: (v) => setDisplay(Math.round(v)),
+      onComplete: () => setDisplay(value),
     });
-    return controls.stop;
-  }, [inView, value, mv]);
+    return () => controls.stop();
+  }, [inView, value, reduce]);
+
+  // Safety net: never leave a stat stuck at 0 (e.g. if IntersectionObserver
+  // never fires on some mobile browsers).
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setDisplay((d) => (d === 0 && value !== 0 ? value : d));
+    }, 2600);
+    return () => clearTimeout(t);
+  }, [value]);
 
   return (
     <span ref={ref}>
