@@ -2,6 +2,7 @@ import "@/App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
+import { CookieConsent } from "@/components/CookieConsent";
 import PublicLayout from "@/pages/PublicLayout";
 import Home from "@/pages/Home";
 import About from "@/pages/About";
@@ -21,6 +22,7 @@ function App() {
     <AuthProvider>
       <Toaster position="top-right" richColors />
       <BrowserRouter>
+        <CookieConsent />
         <Routes>
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
