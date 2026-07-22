@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Heart } from "lucide-react";
 import { Logo } from "./Logo";
+import { useFavorites } from "@/context/FavoritesContext";
 
 const NAV = [
   { to: "/", label: "Domů" },
@@ -16,6 +17,7 @@ export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { count } = useFavorites();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -56,6 +58,19 @@ export const Navbar = () => {
               );
             })}
             <Link
+              to="/oblibene"
+              data-testid="nav-favorites"
+              aria-label="Oblíbené nemovitosti"
+              className={`relative p-2 transition-colors ${location.pathname === "/oblibene" ? "text-[#DC1C2E]" : "text-[#0A0A0A] hover:text-[#DC1C2E]"}`}
+            >
+              <Heart size={22} className={count > 0 ? "fill-[#DC1C2E] text-[#DC1C2E]" : ""} />
+              {count > 0 && (
+                <span data-testid="nav-favorites-count" className="absolute top-0 right-0 bg-[#DC1C2E] text-white text-[10px] font-black min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center">
+                  {count}
+                </span>
+              )}
+            </Link>
+            <Link
               to="/prodej"
               data-testid="nav-cta-sell"
               className="bg-[#DC1C2E] hover:bg-[#a31522] text-white font-bold py-2.5 px-5 text-sm uppercase tracking-wider rounded-full shadow-md shadow-red-900/20 hover:scale-[1.04] transition-transform"
@@ -87,6 +102,14 @@ export const Navbar = () => {
               {item.label}
             </Link>
           ))}
+          <Link
+            to="/oblibene"
+            data-testid="nav-mobile-favorites"
+            className="flex items-center justify-between py-3 text-base font-bold uppercase tracking-wider text-[#0A0A0A] border-b border-gray-100"
+          >
+            <span className="flex items-center gap-2"><Heart size={18} className={count > 0 ? "fill-[#DC1C2E] text-[#DC1C2E]" : ""} /> Oblíbené</span>
+            {count > 0 && <span className="bg-[#DC1C2E] text-white text-xs font-black w-6 h-6 rounded-full flex items-center justify-center">{count}</span>}
+          </Link>
           <Link
             to="/prodej"
             className="block mt-3 text-center bg-[#DC1C2E] text-white font-bold py-3 uppercase tracking-wider rounded-full"

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { BedDouble, Bath, Maximize, MapPin } from "lucide-react";
 import { mediaUrl } from "@/lib/api";
 import { formatPrice, PROPERTY_TYPES, DEAL_TYPES, STATUS_LABELS } from "@/lib/format";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 export const PropertyCard = ({ property }) => {
   const img = property.images?.[0];
@@ -35,6 +36,11 @@ export const PropertyCard = ({ property }) => {
         <span className="absolute bottom-3 right-3 bg-white/90 backdrop-blur text-[#0A0A0A] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
           {PROPERTY_TYPES[property.property_type]}
         </span>
+        <FavoriteButton
+          propertyId={property.id}
+          size={18}
+          className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur shadow-md"
+        />
       </div>
 
       <div className="p-5 flex flex-col flex-1">

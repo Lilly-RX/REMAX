@@ -4,6 +4,7 @@ import { BedDouble, Bath, Maximize, MapPin, ArrowLeft, Phone, Mail, Send } from 
 import { toast } from "sonner";
 import api, { mediaUrl } from "@/lib/api";
 import { formatPrice, PROPERTY_TYPES, DEAL_TYPES, STATUS_LABELS } from "@/lib/format";
+import { FavoriteButton } from "@/components/FavoriteButton";
 
 export default function PropertyDetail() {
   const { id } = useParams();
@@ -63,6 +64,11 @@ export default function PropertyDetail() {
                 <span className="bg-[#DC1C2E] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">{STATUS_LABELS[property.status]}</span>
               )}
             </div>
+            <FavoriteButton
+              propertyId={property.id}
+              size={22}
+              className="absolute top-4 right-4 w-11 h-11 bg-white/90 backdrop-blur shadow-lg"
+            />
           </div>
           {images.length > 1 && (
             <div className="flex gap-3 mt-3 overflow-x-auto scrollbar-hide">
