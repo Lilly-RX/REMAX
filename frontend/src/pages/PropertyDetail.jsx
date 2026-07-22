@@ -58,9 +58,9 @@ export default function PropertyDetail() {
               <div className="w-full h-full flex items-center justify-center text-gray-300">Bez fotografie</div>
             )}
             <div className="absolute top-4 left-4 flex gap-2">
-              <span className="bg-[#003DA5] text-white text-xs font-bold px-3 py-1 uppercase">{DEAL_TYPES[property.deal_type]}</span>
+              <span className="bg-[#003DA5] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">{DEAL_TYPES[property.deal_type]}</span>
               {property.status !== "aktivni" && (
-                <span className="bg-[#DC1C2E] text-white text-xs font-bold px-3 py-1 uppercase">{STATUS_LABELS[property.status]}</span>
+                <span className="bg-[#DC1C2E] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">{STATUS_LABELS[property.status]}</span>
               )}
             </div>
           </div>
@@ -75,7 +75,7 @@ export default function PropertyDetail() {
           )}
 
           <div className="mt-8">
-            <span className="bg-gray-100 text-[#0A0A0A] text-xs font-bold px-3 py-1 uppercase tracking-wide">
+            <span className="bg-gray-100 text-[#0A0A0A] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
               {PROPERTY_TYPES[property.property_type]}
             </span>
             <h1 className="font-display text-3xl sm:text-4xl font-black tracking-tight text-[#0A0A0A] mt-4">{property.title}</h1>
@@ -98,10 +98,10 @@ export default function PropertyDetail() {
 
         {/* Sidebar contact */}
         <aside className="lg:col-span-1">
-          <div className="sticky top-28 bg-[#F9FAFB] border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.05)] p-6">
+          <div className="sticky top-28 bg-[#F5F6F8] border border-gray-100 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.05)] p-6">
             {agent && (
               <div className="flex items-center gap-4 pb-5 mb-5 border-b border-gray-200">
-                {agent.photo_url && <img src={mediaUrl(agent.photo_url)} alt={agent.name} className="w-16 h-16 object-cover" />}
+                {agent.photo_url && <img src={mediaUrl(agent.photo_url)} alt={agent.name} className="w-16 h-16 object-cover rounded-xl" />}
                 <div>
                   <div className="font-display font-bold text-[#0A0A0A]">{agent.name}</div>
                   <div className="text-xs font-bold uppercase tracking-wider text-[#DC1C2E]">{agent.role}</div>

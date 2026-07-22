@@ -5,7 +5,7 @@ import { Building2, Shield, Cookie, FileText, Megaphone } from "lucide-react";
 const Section = ({ icon: Icon, title, children, id }) => (
   <section id={id} className="scroll-mt-28" data-testid={`legal-${id}`}>
     <div className="flex items-center gap-3 mb-4">
-      <span className="w-10 h-10 flex items-center justify-center bg-[#003DA5]/10 text-[#003DA5]">
+      <span className="w-10 h-10 flex items-center justify-center bg-[#003DA5]/10 text-[#003DA5] rounded-xl">
         <Icon size={20} />
       </span>
       <h2 className="font-display text-2xl font-bold text-[#0A0A0A]">{title}</h2>
@@ -27,8 +27,9 @@ export default function Legal() {
 
   return (
     <div data-testid="legal-page">
-      <section className="bg-[#0A0A0A] text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <section className="relative overflow-hidden bg-[#05070E] text-white grain">
+        <div className="absolute -top-24 -right-20 w-96 h-96 bg-[#003DA5]/25 rounded-full blur-3xl" />
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
           <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#DC1C2E]">Právní informace</span>
           <h1 className="font-display text-4xl sm:text-5xl font-black tracking-tighter mt-3">Právní informace a ochrana údajů</h1>
         </div>

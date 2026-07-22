@@ -1,0 +1,25 @@
+{
+  "summary": "Frontend E2E verification of the two recent changes: (1) new 'Odhad' option in Sell form with query-param preselect, and (2) unified dark PageHero across all public pages. All requested flows pass. Sell/prodej?typ=odhad&nolenis=1 preselects sell-deal-type='odhad', hero title 'Zjistěte cenu své nemovitosti zdarma', select contains exactly 3 options (Prodej, Pronájem, Odhad nemovitosti zdarma); submit succeeds with Czech toast. Default /prodej defaults to 'prodej' and submits OK. Contact form /kontakt submits (200) with toast 'Zpráva byla odeslána. Brzy se vám ozveme.' Reviews submit at /recenze succeeds with pending-approval toast. Properties grid renders 12 cards, filter-deal-prodej and property-type filters work, search-location=Tachov narrows to 10 results, full pagination testids present (page-prev, page-1..7, page-next, pagination). Property detail inquiry submits via /api/contact 200 with toast 'Zpráva byla odeslána. Brzy se vám ozveme.' Every non-Home public page (/nemovitosti, /o-nas, /tym, /recenze, /kontakt, /prodej) renders the shared data-testid=page-hero; Home has its own hero. No JS console errors — only benign 401 for the admin /api/auth/me probe on public pages (expected). Home service tiles all present; service-odhad correctly links to /prodej?typ=odhad.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "Kontakt form submit", "issue": "Cookie consent banner (fixed bottom) can intercept the submit-button click before the user accepts cookies. Playwright click was interceptable and required force=true or dismissing the banner. Real users click the banner first so this is only a testability nit — consider z-index/pointer-events so overlay doesn't cover CTA above the fold on short viewports.", "affected_selectors": ["[data-testid=contact-submit-btn]"]}
+    ],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/test_reports/iteration_3.json"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Sell.jsx resets form state on submit but keeps deal_type — nice UX. However selectedDealType from URL is only read on first render; if user navigates in-app from /prodej to /prodej?typ=odhad via <Link>, the select won't update because useState(initialType) doesn't react to searchParams changes. Consider useEffect to sync form.deal_type when searchParams 'typ' changes.",
+    "Cookie consent banner appears to overlay the primary CTA on the contact page for smaller viewports (see integration_issues). Non-blocking but worth a z-index / bottom-offset tweak.",
+    "GET /api/auth/me returns 401 on every public page for anonymous visitors (as expected) and produces two console error lines per page load. Consider a silent 204 or handling the 401 as expected in the client to keep the console clean in production."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "not tested (per request)", "frontend": "100% on all required flows" },
+  "test_credentials": "Not required for these public flows.",
+  "seed_data_creation": "Created 1 odhad + 1 prodej sell inquiry, 1 kontakt message, 1 pending review (office target), and 1 property-detail inquiry — all persisted via /api/contact and /api/reviews. Prior iteration_2 cleanup helper can be reused to purge these; none are visible on public UI (contact/inquiry live only in admin; review is pending).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "All Sell form flows tested with cookie banner dismissed first ('Přijmout vše' or 'Jen nezbytné'). Use ?nolenis=1 for scroll reliability. Testids confirmed working: sell-deal-type, sell-name/phone/email/location/area/message/submit-btn, contact-name/email/message/submit-btn, review-name/text/target/submit-btn, inquiry-name/email/message/submit, page-hero, properties-grid, filter-deal-prodej, search-location, pagination + page-1..7 + page-prev/next, service-odhad/prodej/pronajem/konzultace. Emails via Resend are in sandbox mode; DB persistence confirmed by 200 responses."
+}
