@@ -44,7 +44,7 @@ export default function Home() {
             </h1>
             <p className="mt-6 text-lg text-gray-600 leading-relaxed max-w-lg">
               Sehraný tým čtyř zkušených makléřů s osobním přístupem a hlubokou znalostí
-              tachovského regionu. Prodáme i koupíme vaši nemovitost rychle a bezpečně.
+              tachovského regionu. Prodáme vaši nemovitost rychle a bezpečně.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <Link
@@ -70,7 +70,7 @@ export default function Home() {
       <section className="bg-[#003DA5] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {[
-            { icon: Award, value: "15+", label: "Let zkušeností" },
+            { icon: Award, value: "17+", label: "Let zkušeností" },
             { icon: HomeIcon, value: "500+", label: "Prodaných nemovitostí" },
             { icon: Users, value: "4", label: "Profesionální makléři" },
             { icon: MapPin, value: "100%", label: "Znalost Tachovska" },

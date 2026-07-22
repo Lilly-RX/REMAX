@@ -53,9 +53,36 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-gray-500">
+        {/* Legal / company identification */}
+        <div className="mt-12 pt-8 border-t border-gray-800 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#DC1C2E] mb-3">Právní a identifikační údaje</h4>
+            <p className="text-xs text-gray-400 leading-relaxed">
+              Ochranná známka <span className="text-gray-300">RE/MAX Active Broker</span> je provozována podnikatelem
+              <span className="text-gray-300"> Slavomír Kortan</span>, IČ <span className="text-gray-300">73451240</span>,
+              ID datové schránky <span className="text-gray-300">xsvnzbg</span>, se sídlem náměstí Republiky 751, 347 01 Tachov.
+              Makléři jsou nezávislí podnikatelé podnikající na základě živnostenského oprávnění.
+              Kancelář je součástí sítě realitních kanceláří RE/MAX v České republice.
+              Číslo depozitního účtu kanceláře: <span className="text-gray-300">243212585/0300</span>.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#DC1C2E] mb-3">Dokumenty</h4>
+            <ul className="space-y-2 text-sm text-gray-300">
+              <li><Link to="/pravni-informace#gdpr" className="hover:text-white transition-colors" data-testid="footer-gdpr">Zpracování osobních údajů (GDPR)</Link></li>
+              <li><Link to="/pravni-informace#cookies" className="hover:text-white transition-colors" data-testid="footer-cookies">Používání cookies</Link></li>
+              <li><Link to="/pravni-informace#podminky" className="hover:text-white transition-colors" data-testid="footer-terms">Obchodní podmínky a reklamační řád</Link></li>
+              <li><Link to="/pravni-informace#oznamovatele" className="hover:text-white transition-colors" data-testid="footer-whistle">Ochrana oznamovatelů</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-10 pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-gray-500">
           <span>© {new Date().getFullYear()} RE/MAX Active Broker. Všechna práva vyhrazena.</span>
-          <Link to="/admin/login" className="hover:text-gray-300" data-testid="footer-admin-link">Administrace</Link>
+          <div className="flex items-center gap-4">
+            <Link to="/pravni-informace" className="hover:text-gray-300" data-testid="footer-legal-link">Právní informace</Link>
+            <Link to="/admin/login" className="hover:text-gray-300" data-testid="footer-admin-link">Administrace</Link>
+          </div>
         </div>
       </div>
     </footer>

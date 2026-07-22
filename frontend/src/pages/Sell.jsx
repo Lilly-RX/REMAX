@@ -1,19 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Send, TrendingUp, ShieldCheck, Clock } from "lucide-react";
 import { toast } from "sonner";
 import api from "@/lib/api";
 import { DEAL_TYPES, PROPERTY_TYPES } from "@/lib/format";
 
 export default function Sell() {
+  const [agents, setAgents] = useState([]);
   const [form, setForm] = useState({
     name: "", email: "", phone: "", deal_type: "prodej", property_type: "byt",
-    location: "", area: "", message: "",
+    location: "", area: "", message: "", preferred_agent: "",
   });
   const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    api.get("/agents").then((r) => setAgents(r.data)).catch(() => {});
+  }, []);
 
   const submit = async (e) => {
     e.preventDefault();
     setSending(true);
+    const agentName = form.preferred_agent
+      ? (agents.find((a) => a.id === form.preferred_agent)?.name || "-")
+      : "Nezáleží – přidělte makléře";
     const body = {
       name: form.name,
       email: form.email,
@@ -23,13 +31,14 @@ export default function Sell() {
         `Typ obchodu: ${DEAL_TYPES[form.deal_type]}\n` +
         `Typ nemovitosti: ${PROPERTY_TYPES[form.property_type]}\n` +
         `Lokalita: ${form.location || "-"}\n` +
-        `Plocha: ${form.area ? form.area + " m²" : "-"}\n\n` +
+        `Plocha: ${form.area ? form.area + " m²" : "-"}\n` +
+        `Preferovaný makléř: ${agentName}\n\n` +
         `Popis / poznámka:\n${form.message || "-"}`,
     };
     try {
       await api.post("/contact", body);
       toast.success("Děkujeme! Ozveme se vám co nejdříve s nezávaznou nabídkou.");
-      setForm({ name: "", email: "", phone: "", deal_type: "prodej", property_type: "byt", location: "", area: "", message: "" });
+      setForm({ name: "", email: "", phone: "", deal_type: "prodej", property_type: "byt", location: "", area: "", message: "", preferred_agent: "" });
     } catch {
       toast.error("Odeslání se nezdařilo. Zkuste to prosím znovu.");
     } finally {
@@ -97,6 +106,14 @@ export default function Sell() {
                 <label className={lbl}>Plocha (m²)</label>
                 <input type="number" value={form.area} onChange={(e) => setForm({ ...form, area: e.target.value })} data-testid="sell-area" className={`mt-1.5 ${inp}`} />
               </div>
+            </div>
+            <div>
+              <label className={lbl}>Preferovaný makléř</label>
+              <select value={form.preferred_agent} onChange={(e) => setForm({ ...form, preferred_agent: e.target.value })} data-testid="sell-preferred-agent" className={`mt-1.5 ${inp}`}>
+                <option value="">Nezáleží mi – přidělte mi makléře</option>
+                {agents.map((a) => <option key={a.id} value={a.id}>{a.name}{a.role ? ` – ${a.role}` : ""}</option>)}
+              </select>
+              <p className="text-xs text-gray-500 mt-1.5">Vyberte konkrétního makléře, nebo nechte volbu na nás – vhodného makléře vám rádi přidělíme.</p>
             </div>
             <div>
               <label className={lbl}>Popis nemovitosti / poznámka</label>
