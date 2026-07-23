@@ -80,6 +80,13 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
 - Verified: /nemovitosti?deal=prodej&type=byt&location=Tachov activates PRODEJ+BYT chips, pre-fills
   location, shows "Zobrazeno 4 z 4 nemovitostí". Quick-search UI renders correctly below hero.
 
+## Fix (2026-07-22 pt.3) — Production sort via idempotent migration
+- Production DB persists across redeploys & is non-empty, so seed-on-empty never re-ran → stale inverted
+  created_at remained. Added startup migration `fix_created_at_v1` (marker in db['_migrations']): matches
+  each property by id and sets created_at to corrected bundle value. Idempotent; runs once per DB.
+- Verified in preview (updated 0, no-op since already correct; marker set). Needs production REDEPLOY.
+- NOTE: use db['_migrations'] (motor forbids underscore attribute access).
+
 ## Fixes (2026-07-22 pt.2)
 - Sorting bug: all 73 properties imported in one batch (created_at = scrape order, inverse of source
   newest-first). Reversed created_at across existing properties (fix_dates.py) so "Nejnovější" (created_at

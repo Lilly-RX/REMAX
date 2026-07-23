@@ -577,6 +577,25 @@ async def startup():
     except Exception as e:
         logger.error(f"Data seed failed: {e}")
 
+    # One-time migration: align property created_at with the corrected values from the bundle.
+    # Fixes inverted "Nejnovější/Nejstarší" ordering on databases seeded before the date fix
+    # (e.g. the persistent production DB). Idempotent via a marker in _migrations.
+    try:
+        already = await db["_migrations"].find_one({"key": "fix_created_at_v1"})
+        if already is None:
+            mseed = ROOT_DIR / "seed_data.json"
+            mbundle = json.loads(mseed.read_text(encoding="utf-8")) if mseed.exists() else None
+            if mbundle and mbundle.get("properties"):
+                fixed = 0
+                for p in mbundle["properties"]:
+                    if p.get("id") and p.get("created_at"):
+                        r = await db.properties.update_one({"id": p["id"]}, {"$set": {"created_at": p["created_at"]}})
+                        fixed += r.modified_count
+                await db["_migrations"].insert_one({"key": "fix_created_at_v1", "at": datetime.now(timezone.utc).isoformat()})
+                logger.info(f"Migration fix_created_at_v1: updated created_at on {fixed} properties")
+    except Exception as e:
+        logger.error(f"Migration fix_created_at_v1 failed: {e}")
+
     # Storage
     try:
         init_storage()
