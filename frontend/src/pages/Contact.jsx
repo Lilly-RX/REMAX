@@ -86,7 +86,6 @@ export default function Contact() {
                     <div>
                       <div className="font-bold text-[#0A0A0A]">E-mail</div>
                       <a href="mailto:activebroker@re-max.cz" className="text-gray-600 text-sm hover:text-[#003DA5] block">activebroker@re-max.cz</a>
-                      <a href="mailto:info@remaxactivebroker.cz" className="text-gray-600 text-sm hover:text-[#003DA5] block">info@remaxactivebroker.cz</a>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
