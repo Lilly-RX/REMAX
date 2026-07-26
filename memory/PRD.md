@@ -123,6 +123,13 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
   scrape of their remax-czech.cz office page.
 - Resend still sandbox-limited (OFFICE_EMAIL routes only to verified address) — needs domain verification.
 
+## Update (2026-06-27) — Reply-To na notifikačních e-mailech
+- send_notification_email nyní přidává `reply_to` = e-mail klienta (msg.email), takže odpověď z kanceláře
+  jde přímo klientovi, ne na noreply@remaxactivebroker.cz. Ověřeno curl POST /api/contact → 200, bez chyby v logu.
+- Google recenze: uživatel potvrdil, že přidávat NETŘEBA (zrušeno z backlogu).
+- MAXIS XML feed URL: uživatel dodá v pondělí 27.7.2026 → pak postavit auto-sync parser.
+- Uživatel schválil nové nasazení (redeploy) přes platformu.
+
 ## Next Tasks
 - Reviews (2026-07-01): client reviews with 1-5 stars, target office or specific agent, admin moderation/approval, admin replies; shown on /recenze, per-agent rating on /tym, testimonials on homepage.
 - Also added earlier: Sell/rent form (/prodej), Properties search (location + price range) + pagination, 73 real properties imported from remax-czech.cz, real agents (4) + logo + team hero.

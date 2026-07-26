@@ -336,11 +336,14 @@ def send_notification_email(msg: ContactMessage):
         <p><strong>Zpráva:</strong></p>
         <p>{msg.message}</p>
         """
-        resend.Emails.send({
+        payload = {
             "from": os.environ.get("SENDER_EMAIL", "onboarding@resend.dev"),
             "to": [os.environ.get("OFFICE_EMAIL", "info@remaxactivebroker.cz")],
             "subject": f"{msg.subject} – {msg.name}",
-            "html": html})
+            "html": html}
+        if msg.email:
+            payload["reply_to"] = msg.email
+        resend.Emails.send(payload)
     except Exception as e:
         logger.error(f"Email send failed: {e}")
 
