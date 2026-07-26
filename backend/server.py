@@ -563,6 +563,9 @@ async def startup():
             if files_count == 0 and bundle.get("files"):
                 await db.files.insert_many(bundle["files"])
                 logger.info(f"Seeded {len(bundle['files'])} file records from bundle")
+            if bundle.get("reviews") and await db.reviews.count_documents({}) == 0:
+                await db.reviews.insert_many(bundle["reviews"])
+                logger.info(f"Seeded {len(bundle['reviews'])} reviews from bundle")
         elif agents_count == 0:
             # Fallback placeholder seed (only when no real data bundle is present)
             agent_ids = []

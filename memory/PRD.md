@@ -80,6 +80,15 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
 - Verified: /nemovitosti?deal=prodej&type=byt&location=Tachov activates PRODEJ+BYT chips, pre-fills
   location, shows "Zobrazeno 4 z 4 nemovitostí". Quick-search UI renders correctly below hero.
 
+## Updates (2026-07-22 pt.4)
+- Resend domain remaxactivebroker.cz VERIFIED by user. Email tested from preview: POST /api/contact 200,
+  no "domain not verified" error → sending works. Sender "RE/MAX Active Broker <noreply@remaxactivebroker.cz>",
+  recipient activebroker@re-max.cz. Production sends after REDEPLOY (prod .env updated at deploy).
+- Added 3 real approved office reviews from firmy.cz (Bouda/Ryšavý/Otavová, all 5★) via insert_reviews.py;
+  seed_data.json now includes reviews; startup seeds reviews when db.reviews empty. Shows on /recenze + Home.
+- Google reviews URL was a dynamic local-pack link (not reliably scrapeable) — skipped; can add if user pastes texts.
+- Pending: MAXIS XML feed URL (user will provide ~tomorrow) → build auto-sync then.
+
 ## Fix (2026-07-22 pt.3) — Production sort via idempotent migration
 - Production DB persists across redeploys & is non-empty, so seed-on-empty never re-ran → stale inverted
   created_at remained. Added startup migration `fix_created_at_v1` (marker in db['_migrations']): matches

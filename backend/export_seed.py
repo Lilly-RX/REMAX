@@ -19,6 +19,7 @@ data = {
     "agents": dump("agents"),
     "properties": dump("properties"),
     "files": dump("files"),
+    "reviews": dump("reviews"),
 }
 out = Path(__file__).parent / "seed_data.json"
 out.write_text(json.dumps(data, ensure_ascii=False, default=str), encoding="utf-8")
