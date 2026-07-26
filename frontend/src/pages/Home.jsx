@@ -213,7 +213,7 @@ export default function Home() {
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 1, duration: 0.7, ease: EASE }}
-          className="hidden sm:flex absolute bottom-10 right-6 lg:right-[42%] z-30 items-center gap-3 bg-white/95 backdrop-blur-md rounded-2xl pl-3 pr-5 py-3 shadow-2xl shadow-black/40"
+          className="hidden sm:flex absolute bottom-28 lg:bottom-32 right-6 lg:right-[42%] z-30 items-center gap-3 bg-white/95 backdrop-blur-md rounded-2xl pl-3 pr-5 py-3 shadow-2xl shadow-black/40"
           data-testid="hero-rating-badge"
         >
           <span className="w-11 h-11 rounded-xl bg-[#DC1C2E] text-white flex items-center justify-center">
