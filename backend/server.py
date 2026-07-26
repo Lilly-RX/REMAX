@@ -602,6 +602,25 @@ async def startup():
     except Exception as e:
         logger.error(f"Migration fix_created_at_v1 failed: {e}")
 
+    # One-time migration: ensure the real approved reviews exist on any DB (incl. the
+    # persistent production DB that was first seeded before reviews were bundled, or that
+    # holds a stray record which blocked the seed-on-empty check). Idempotent per review id.
+    try:
+        already = await db["_migrations"].find_one({"key": "seed_reviews_v1"})
+        if already is None:
+            mseed = ROOT_DIR / "seed_data.json"
+            mbundle = json.loads(mseed.read_text(encoding="utf-8")) if mseed.exists() else None
+            if mbundle and mbundle.get("reviews"):
+                added = 0
+                for rv in mbundle["reviews"]:
+                    if rv.get("id") and await db.reviews.count_documents({"id": rv["id"]}) == 0:
+                        await db.reviews.insert_one(rv)
+                        added += 1
+                await db["_migrations"].insert_one({"key": "seed_reviews_v1", "at": datetime.now(timezone.utc).isoformat()})
+                logger.info(f"Migration seed_reviews_v1: inserted {added} reviews")
+    except Exception as e:
+        logger.error(f"Migration seed_reviews_v1 failed: {e}")
+
     # Storage
     try:
         init_storage()
