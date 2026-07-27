@@ -123,6 +123,27 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
   scrape of their remax-czech.cz office page.
 - Resend still sandbox-limited (OFFICE_EMAIL routes only to verified address) — needs domain verification.
 
+## Feature (2026-06-27) — Automatická synchronizace nabídek z MAXIS (FTP XML)
+- Nový modul `/app/backend/maxis_sync.py`: přes FTP stahuje `XMLNEW/nabidky.xml` (86 nabídek)
+  a `XMLNEW/makleri.xml`, mapuje `id_uzivatel` → e-mail makléře → interní agent_id, upsertuje
+  nemovitosti podle `source_id`. MAXIS = zdroj pravdy (volba 1a): nabídky ve feedu se přidají/aktualizují,
+  source-managed nabídky mimo feed se smažou (manuální bez source_id se nikdy nemažou). Nejnovějších 6 = featured.
+- Fotky se odkazují přímo z `https://mlsf.remax-czech.cz/data` + `<soubor>` (bez nahrávání, vždy aktuální).
+- Makléř Josef Havlíček (volba 2b): NEpřidán do týmu (tým zůstává 4), jeho 25 nabídek se zobrazuje bez
+  přiřazeného makléře (agent_id=null). Recenze z feedu (volba 3a): NEimportují se.
+- Ceny: zahraniční nabídky (Rakousko/Chorvatsko) jsou ve feedu v EUR → převod EUR→Kč aktuálním kurzem
+  ČNB (denní fixing) při každé synchronizaci; vše se ukládá v Kč. Fallback kurz 25.0 při výpadku ČNB.
+- Endpointy: `POST /api/admin/maxis/sync` (manuální), `GET /api/admin/maxis/status` (obojí auth). Stav v
+  kolekci `sync_status`. Plánovač APScheduler: automaticky každé pondělí 04:00 (Europe/Prague) + startup
+  „catch-up" běh pokud poslední sync > 6 dní / nikdy (populuje čerstvou produkční DB při prvním nasazení).
+- Admin panel (Přehled): karta „Synchronizace nabídek (MAXIS)" s tlačítkem „Synchronizovat teď" (data-testid
+  maxis-sync-btn) + čas poslední synchronizace (maxis-last-sync).
+- .env: přidány `MAXIS_FTP_HOST`, `MAXIS_FTP_USER`, `MAXIS_FTP_PASS`. requirements.txt: `APScheduler`.
+- Ověřeno: testing_agent iteration_6.json — 52/52 backend testů + kompletní frontend flow PASS (fotky se
+  vykreslují, párování makléřů 42/14/3/2/25=null, auth vynucen, admin tlačítko + toast funguje). Měna Kč
+  ověřena curl (všech 86 v Kč, EUR převedeno).
+- POZOR pro nasazení: FTP údaje musí být v produkčním .env; sync se pak spustí sám při prvním startu.
+
 ## Update (2026-06-27) — Reply-To na notifikačních e-mailech
 - send_notification_email nyní přidává `reply_to` = e-mail klienta (msg.email), takže odpověď z kanceláře
   jde přímo klientovi, ne na noreply@remaxactivebroker.cz. Ověřeno curl POST /api/contact → 200, bez chyby v logu.
