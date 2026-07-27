@@ -638,6 +638,30 @@ async def startup():
     except Exception as e:
         logger.error(f"Migration seed_reviews_v1 failed: {e}")
 
+    # One-time migration: ensure the 5th agent Josef Havlíček exists on any DB (so his
+    # foreign listings link to him and the team shows 5). Idempotent by email.
+    try:
+        already = await db["_migrations"].find_one({"key": "add_havlicek_agent_v1"})
+        if already is None:
+            exists = await db.agents.count_documents({"email": "josef.havlicek@re-max.cz"})
+            if exists == 0:
+                await db.agents.insert_one({
+                    "id": "11148000-0000-4000-8000-000000011148",
+                    "name": "Josef Havlíček",
+                    "role": "Realitní makléř",
+                    "bio": "Specializuje se na zahraniční nemovitosti, především v rakouských Alpách "
+                           "(Zell am See, Saalbach, Schladming) a v Chorvatsku. Pomůže vám s koupí "
+                           "apartmánu, chaty i investiční nemovitosti v zahraničí.",
+                    "phone": "+420 777 740 770",
+                    "email": "josef.havlicek@re-max.cz",
+                    "photo_url": "https://mlsf.remax-czech.cz/data/uzivatele/11148/1307836_492040_big_w.png",
+                    "order": 5,
+                })
+            await db["_migrations"].insert_one({"key": "add_havlicek_agent_v1", "at": datetime.now(timezone.utc).isoformat()})
+            logger.info("Migration add_havlicek_agent_v1 applied")
+    except Exception as e:
+        logger.error(f"Migration add_havlicek_agent_v1 failed: {e}")
+
     # Storage
     try:
         init_storage()

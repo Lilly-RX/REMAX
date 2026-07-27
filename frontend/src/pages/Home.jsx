@@ -249,7 +249,7 @@ export default function Home() {
               transition={{ delay: 0.8, duration: 0.9 }}
               className="mt-8 text-lg text-gray-300 leading-relaxed max-w-lg"
             >
-              Sehraný tým čtyř zkušených makléřů s osobním přístupem a hlubokou
+              Sehraný tým pěti zkušených makléřů s osobním přístupem a hlubokou
               znalostí tachovského regionu. Prodáme vaši nemovitost rychle a bezpečně.
             </motion.p>
 
@@ -368,7 +368,7 @@ export default function Home() {
             {[
               { icon: Award, value: 17, suffix: "+", label: "Let zkušeností", sub: "Praxe znát na výsledcích" },
               { icon: HomeIcon, value: 500, suffix: "+", label: "Prodaných nemovitostí", sub: "Stovky spokojených klientů" },
-              { icon: Users, value: 4, suffix: "", label: "Profesionální makléři", sub: "Sehraný tým na jednom místě" },
+              { icon: Users, value: 5, suffix: "", label: "Profesionální makléři", sub: "Sehraný tým na jednom místě" },
               { icon: MapPin, value: 100, suffix: "%", label: "Znalost Tachovska", sub: "Region známe do detailu" },
             ].map((s, i) => (
               <Reveal key={i} delay={i * 0.08} className="border-t-2 border-[#0A0A0A] pt-5">
@@ -481,7 +481,7 @@ export default function Home() {
                 />
               </div>
               <div className="absolute -bottom-6 -left-6 bg-white text-[#0A0A0A] rounded-2xl px-6 py-4 shadow-2xl">
-                <div className="font-display text-3xl font-black">4</div>
+                <div className="font-display text-3xl font-black">5</div>
                 <div className="text-xs font-bold text-gray-500 uppercase tracking-wide">makléři · 1 tým</div>
               </div>
             </div>

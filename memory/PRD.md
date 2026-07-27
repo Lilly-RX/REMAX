@@ -129,8 +129,10 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
   nemovitosti podle `source_id`. MAXIS = zdroj pravdy (volba 1a): nabídky ve feedu se přidají/aktualizují,
   source-managed nabídky mimo feed se smažou (manuální bez source_id se nikdy nemažou). Nejnovějších 6 = featured.
 - Fotky se odkazují přímo z `https://mlsf.remax-czech.cz/data` + `<soubor>` (bez nahrávání, vždy aktuální).
-- Makléř Josef Havlíček (volba 2b): NEpřidán do týmu (tým zůstává 4), jeho 25 nabídek se zobrazuje bez
-  přiřazeného makléře (agent_id=null). Recenze z feedu (volba 3a): NEimportují se.
+- Makléř Josef Havlíček: PŮVODNĚ nepřidán (volba 2b), 2026-06-27 uživatel změnil názor → PŘIDÁN jako
+  5. makléř do týmu (migrace `add_havlicek_agent_v1`, id 11148000-..., foto z mlsf, order 5). Jeho 25
+  zahraničních nabídek se páruje na jeho agent_id. Texty „4 makléři/čtyř/čtveřice" změněny na 5/pět/pětice
+  (Home.jsx hero + stat + badge, About.jsx, Team.jsx). Recenze z feedu (volba 3a): NEimportují se.
 - Ceny: měna se přebírá přímo z feedu (`nemovitost_mena`) — zahraniční nabídky (Rakousko/Chorvatsko)
   zůstávají v € (27 nabídek), tuzemské v Kč (59). ŽÁDNÝ přepočet (dle přání uživatele 2026-06-27).
 - Filtr makléře na /nemovitosti: chipy s makléři z /api/agents + „Ostatní / zahraniční" (agent_id=null,
