@@ -482,7 +482,7 @@ export default function Home() {
               </div>
               <div className="absolute -bottom-6 -left-6 bg-white text-[#0A0A0A] rounded-2xl px-6 py-4 shadow-2xl">
                 <div className="font-display text-3xl font-black">5</div>
-                <div className="text-xs font-bold text-gray-500 uppercase tracking-wide">makléři · 1 tým</div>
+                <div className="text-xs font-bold text-gray-500 uppercase tracking-wide">makléřů · 1 tým</div>
               </div>
             </div>
           </Reveal>
