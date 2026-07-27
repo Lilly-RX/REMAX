@@ -10,6 +10,8 @@ export default function Properties() {
   const [properties, setProperties] = useState([]);
   const [deal, setDeal] = useState(searchParams.get("deal") || "");
   const [type, setType] = useState(searchParams.get("type") || "");
+  const [agentFilter, setAgentFilter] = useState(searchParams.get("agent") || "");
+  const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [locationQuery, setLocationQuery] = useState(searchParams.get("location") || "");
@@ -30,17 +32,23 @@ export default function Properties() {
     });
   }, [deal, type]);
 
+  useEffect(() => {
+    api.get("/agents").then((r) => setAgents(r.data)).catch(() => {});
+  }, []);
+
   const norm = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const filtered = properties.filter((p) => {
     if (locationQuery && !norm(p.location).includes(norm(locationQuery))) return false;
     if (priceMin && p.price < Number(priceMin)) return false;
     if (priceMax && p.price > Number(priceMax)) return false;
+    if (agentFilter === "none" && p.agent_id) return false;
+    if (agentFilter && agentFilter !== "none" && p.agent_id !== agentFilter) return false;
     return true;
   });
 
   useEffect(() => {
     setPage(1);
-  }, [locationQuery, priceMin, priceMax, sort]);
+  }, [locationQuery, priceMin, priceMax, sort, agentFilter]);
 
   const sorted = [...filtered].sort((a, b) => {
     switch (sort) {
@@ -67,6 +75,7 @@ export default function Properties() {
     setLocationQuery("");
     setPriceMin("");
     setPriceMax("");
+    setAgentFilter("");
   };
 
   const FilterBtn = ({ active, onClick, children, testid }) => (
@@ -107,6 +116,13 @@ export default function Properties() {
                 <FilterBtn key={k} active={type === k} onClick={() => setType(k)} testid={`filter-type-${k}`}>{v}</FilterBtn>
               ))}
             </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <FilterBtn active={agentFilter === ""} onClick={() => setAgentFilter("")} testid="filter-agent-all">Všichni makléři</FilterBtn>
+              {agents.map((a) => (
+                <FilterBtn key={a.id} active={agentFilter === a.id} onClick={() => setAgentFilter(a.id)} testid={`filter-agent-${a.id}`}>{a.name}</FilterBtn>
+              ))}
+              <FilterBtn active={agentFilter === "none"} onClick={() => setAgentFilter("none")} testid="filter-agent-none">Ostatní / zahraniční</FilterBtn>
+            </div>
 
             {/* Search by location + price */}
             <div className="bg-[#F5F6F8] border border-gray-100 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-5 grid grid-cols-1 md:grid-cols-4 gap-3 mt-2">
@@ -122,7 +138,7 @@ export default function Properties() {
                 <label className="text-xs font-bold uppercase tracking-wider text-[#0A0A0A]">Cena do</label>
                 <input type="number" value={priceMax} onChange={(e) => setPriceMax(e.target.value)} placeholder="bez limitu" data-testid="search-price-max" className={searchInp} />
               </div>
-              {(locationQuery || priceMin || priceMax) && (
+              {(locationQuery || priceMin || priceMax || agentFilter) && (
                 <button onClick={resetSearch} data-testid="search-reset" className="md:col-span-4 justify-self-start text-sm font-bold text-[#DC1C2E] hover:underline">
                   Zrušit vyhledávání ✕
                 </button>

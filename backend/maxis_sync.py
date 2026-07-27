@@ -11,7 +11,6 @@ import io
 import re
 import uuid
 import logging
-import requests
 from ftplib import FTP
 from datetime import datetime, timezone
 import xml.etree.ElementTree as ET
@@ -19,9 +18,6 @@ import xml.etree.ElementTree as ET
 logger = logging.getLogger(__name__)
 
 IMG_BASE = "https://mlsf.remax-czech.cz/data"
-CNB_RATE_URL = ("https://www.cnb.cz/en/financial-markets/foreign-exchange-market/"
-                "central-bank-exchange-rate-fixing/central-bank-exchange-rate-fixing/daily.txt")
-EUR_RATE_FALLBACK = 25.0
 
 DEAL_MAP = {"prodej": "prodej", "pronájem": "pronajem", "pronajem": "pronajem"}
 TYPE_MAP = {
@@ -54,20 +50,6 @@ def _to_iso(s):
         except ValueError:
             continue
     return datetime.now(timezone.utc).isoformat()
-
-
-def _fetch_eur_rate():
-    """Current CZK per 1 EUR from the Czech National Bank daily fixing."""
-    try:
-        r = requests.get(CNB_RATE_URL, timeout=20)
-        r.raise_for_status()
-        for line in r.text.splitlines():
-            parts = line.split("|")
-            if len(parts) == 5 and parts[3] == "EUR":
-                return float(parts[4].replace(",", ".")) / float(parts[2])
-    except Exception as e:
-        logger.error(f"CNB EUR rate fetch failed, using fallback: {e}")
-    return EUR_RATE_FALLBACK
 
 
 def _fetch_feeds():
@@ -195,7 +177,6 @@ async def run_maxis_sync(db):
     feeds = await asyncio.to_thread(_fetch_feeds)
     offers = _parse_offers(feeds["nabidky.xml"])
     uid_to_email = _parse_maklers(feeds["makleri.xml"])
-    eur_rate = await asyncio.to_thread(_fetch_eur_rate)
 
     # Map office agent emails -> our internal agent id
     email_to_agent = {}
@@ -210,12 +191,10 @@ async def run_maxis_sync(db):
         feed_ids.append(sid)
         makler_email = uid_to_email.get(o.pop("makler_uid", ""), "")
         agent_id = email_to_agent.get(makler_email, None)
-        price = o["price"]
-        if o.pop("currency_src", "") == "eur" and price:
-            price = round(price * eur_rate)
+        currency = "€" if o.pop("currency_src", "") == "eur" else "Kč"
         fields = {
-            "title": o["title"], "description": o["description"], "price": price,
-            "currency": o["currency"], "deal_type": o["deal_type"],
+            "title": o["title"], "description": o["description"], "price": o["price"],
+            "currency": currency, "deal_type": o["deal_type"],
             "property_type": o["property_type"], "status": o["status"],
             "location": o["location"], "bedrooms": o["bedrooms"],
             "bathrooms": o["bathrooms"], "area": o["area"], "images": o["images"],
@@ -253,7 +232,6 @@ async def run_maxis_sync(db):
         "duration_s": round((datetime.now(timezone.utc) - started).total_seconds(), 1),
         "feed_count": len(offers),
         "added": added, "updated": updated, "removed": removed, "total": total,
-        "eur_rate": round(eur_rate, 3),
         "ok": True,
     }
     await db["sync_status"].update_one({"key": "maxis_sync"}, {"$set": status}, upsert=True)

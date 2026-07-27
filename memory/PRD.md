@@ -131,8 +131,10 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
 - Fotky se odkazují přímo z `https://mlsf.remax-czech.cz/data` + `<soubor>` (bez nahrávání, vždy aktuální).
 - Makléř Josef Havlíček (volba 2b): NEpřidán do týmu (tým zůstává 4), jeho 25 nabídek se zobrazuje bez
   přiřazeného makléře (agent_id=null). Recenze z feedu (volba 3a): NEimportují se.
-- Ceny: zahraniční nabídky (Rakousko/Chorvatsko) jsou ve feedu v EUR → převod EUR→Kč aktuálním kurzem
-  ČNB (denní fixing) při každé synchronizaci; vše se ukládá v Kč. Fallback kurz 25.0 při výpadku ČNB.
+- Ceny: měna se přebírá přímo z feedu (`nemovitost_mena`) — zahraniční nabídky (Rakousko/Chorvatsko)
+  zůstávají v € (27 nabídek), tuzemské v Kč (59). ŽÁDNÝ přepočet (dle přání uživatele 2026-06-27).
+- Filtr makléře na /nemovitosti: chipy s makléři z /api/agents + „Ostatní / zahraniční" (agent_id=null,
+  Havlíčkovy zahraniční nabídky). Backend `GET /api/properties?agent_id=...`. Filtruje se client-side.
 - Endpointy: `POST /api/admin/maxis/sync` (manuální), `GET /api/admin/maxis/status` (obojí auth). Stav v
   kolekci `sync_status`. Plánovač APScheduler: automaticky každé pondělí 04:00 (Europe/Prague) + startup
   „catch-up" běh pokud poslední sync > 6 dní / nikdy (populuje čerstvou produkční DB při prvním nasazení).

@@ -280,7 +280,7 @@ async def delete_agent(agent_id: str, user: dict = Depends(get_current_user)):
 # ---------------- Properties routes ----------------
 @api_router.get("/properties")
 async def list_properties(deal_type: Optional[str] = None, property_type: Optional[str] = None,
-                          featured: Optional[bool] = None):
+                          featured: Optional[bool] = None, agent_id: Optional[str] = None):
     q = {}
     if deal_type:
         q["deal_type"] = deal_type
@@ -288,6 +288,8 @@ async def list_properties(deal_type: Optional[str] = None, property_type: Option
         q["property_type"] = property_type
     if featured is not None:
         q["featured"] = featured
+    if agent_id:
+        q["agent_id"] = agent_id
     props = await db.properties.find(q, {"_id": 0}).sort("created_at", -1).to_list(500)
     return props
 
