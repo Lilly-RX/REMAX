@@ -1,0 +1,45 @@
+{
+  "summary": "Full backend + frontend verification of the MAXIS FTP XML property sync feature. 52/52 pytest backend tests pass (21 new MAXIS-specific tests in /app/backend/tests/test_maxis.py + 31 existing regression tests). Verified: GET /api/properties returns exactly 86 feed-sourced properties, all with valid title/price/location/property_type/deal_type, non-empty images all under https://mlsf.remax-czech.cz/data/ (first image fetched -> HTTP 200 image/*), no _id leakage, exactly 6 featured. Filters property_type=byt / deal_type=pronajem / combos return only matching rows. Agent linking exact: 25 properties with agent_id=null (Havlicek listings), 61 with valid agent_id all resolving in GET /api/agents; team still 4 agents, Havlicek NOT present. Admin sync auth enforced: GET /api/admin/maxis/status and POST /api/admin/maxis/sync return 401 without cookie and with a garbage token. With admin cookie, POST sync -> 200 with {added,updated,removed,total,feed_count,ok,last_sync}; feed_count=86, total=86; 2nd run idempotent (added=0, removed=0, updated=86, total=86); GET status returns stored stats (key=maxis_sync, ok=true, total=86, no _id). Frontend (Playwright, ?nolenis=1): /nemovitosti shows 'Zobrazeno 12 z 86 nemovitosti', 12 cards, all 12 mlsf images painted (naturalWidth 1600-1920). All 6 filter chips work (pronajem 6, prodej 80, byt 16, dum 25, pozemek 20, komercni 19 within prodej) and pagination works. Card click opens detail: gallery 15/15 mlsf images painted, title/price/location/description + property-inquiry-form present, agent card (Slavomir Kortan) rendered. Havlicek listing (agent_id=null) detail renders gallery (23/25 painted, remainder below-fold lazy) and inquiry form with no agent card; inquiry submit returned success confirmation (test message cleaned up). Admin: login at /admin/login -> /admin, maxis-sync-card visible, maxis-sync-btn shows 'Synchronizuji...' then success toast 'Synchronizace hotova: +0 novych, 86 aktualizovano, 0 odebrano', maxis-last-sync timestamp updated (17:00 -> 17:06 -> 17:07) and total stayed 86.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/admin/maxis/sync, all admin routes", "issue": "No brute-force lockout: 6 consecutive wrong-password logins all return 401 and the account stays usable. Playbook expects lockout after 5 failed attempts."},
+      {"endpoint": "CORS middleware", "issue": "CORS_ORIGINS='*' with allow_credentials=True. Response carries access-control-allow-origin: * plus allow-credentials: true, which browsers reject for cross-origin credentialed calls. Works today only because the SPA is same-origin. Set explicit origins."},
+      {"endpoint": "/api/admin/maxis/sync", "issue": "Only Depends(get_current_user) - no role check. Any authenticated user (not just role=admin) can trigger a full feed sync / deletion pass."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/nemovitosti sort control", "issues": ["'RADIT' uses a native <select> element instead of the shadcn Select used elsewhere - visually inconsistent with the rest of the design system (cosmetic only)."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_maxis.py",
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Optional hardening: restrict CORS_ORIGINS to explicit origin(s) instead of '*' since allow_credentials=True.",
+    "Optional: add role=='admin' check (not just authenticated) on /api/admin/maxis/sync since it can delete properties.",
+    "Optional: implement failed-login lockout per the auth playbook (currently unlimited attempts)."
+  ],
+  "critical_code_review_comments": [
+    "maxis_sync.run_maxis_sync overwrites created_at from the feed on every update; if the feed date ever regresses, the 'newest 6 featured' selection silently changes. Acceptable but worth noting.",
+    "delete_many({'source_id': {'$exists': True, '$nin': feed_ids}}) will wipe ALL source-managed properties if the FTP feed ever returns a valid-but-empty XML (parse succeeds, 0 offers). Consider a safety guard (e.g. abort when feed_count == 0 or drops >50%).",
+    "The sync stores 'ok': True only on success; failures raise 502 and never write an ok:false record, so the admin UI cannot show a failed last-sync state.",
+    "server.py is 679 lines - approaching the 700-line split threshold; MAXIS/admin routes could move to their own router module."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_maxis.py (new)",
+    "/app/backend/tests/backend_test.py (relaxed review rating assertion 400 -> 400/422; FastAPI/Pydantic correctly returns 422)"
+  ],
+  "success_rate": {"backend": "100% (52/52)", "frontend": "100%"},
+  "seed_data_creation": "None. One inquiry message created via the detail-page form during testing was deleted afterwards via DELETE /api/messages/{id}.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "admin@remaxactivebroker.cz / RemaxAdmin2026! (from /app/memory/test_credentials.md) - valid, login works, bcrypt hash starts with $2b$, cookie is HttpOnly; Secure; SameSite=none",
+  "context_for_next_testing_agent": "Use ?nolenis=1 on all frontend URLs; cookie banner accept testid is 'cookie-accept'. Properties filter chips are data-testid filter-deal-{prodej|pronajem}, filter-deal-all, filter-type-{byt|dum|pozemek|komercni}, filter-type-all - do NOT match them by visible text (CSS uppercase makes get_by_role name matching fail). Cards are data-testid property-card-{id}. Backend MAXIS tests live in /app/backend/tests/test_maxis.py and hit the live FTP feed (~5s per sync).",
+  "rca_of_the_issue": "No functional defect found in the MAXIS sync feature; all review-request acceptance criteria verified end-to-end. The single pre-existing pytest failure was a stale test expectation (400 vs FastAPI's 422 for Pydantic validation) and was corrected in the test, not in application code."
+}

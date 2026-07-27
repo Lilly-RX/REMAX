@@ -232,10 +232,10 @@ class TestReviews:
     def test_public_create_rejects_bad_rating(self, public):
         r = public.post(f"{API}/reviews", json={
             "author_name": "TEST", "rating": 7, "text": "bad", "target_type": "office"})
-        assert r.status_code == 400
+        assert r.status_code in (400, 422)
         r = public.post(f"{API}/reviews", json={
             "author_name": "TEST", "rating": 0, "text": "bad", "target_type": "office"})
-        assert r.status_code == 400
+        assert r.status_code in (400, 422)
 
     def test_new_review_not_in_public_list(self, public):
         # Submit

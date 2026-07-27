@@ -440,6 +440,21 @@ async def delete_review(review_id: str, user: dict = Depends(get_current_user)):
     await db.reviews.delete_one({"id": review_id})
     return {"message": "Smazáno"}
 
+# ---------------- MAXIS sync routes ----------------
+@api_router.get("/admin/maxis/status")
+async def maxis_status(user: dict = Depends(get_current_user)):
+    st = await db["sync_status"].find_one({"key": "maxis_sync"}, {"_id": 0})
+    return st or {"last_sync": None}
+
+@api_router.post("/admin/maxis/sync")
+async def maxis_sync_now(user: dict = Depends(get_current_user)):
+    from maxis_sync import run_maxis_sync
+    try:
+        return await run_maxis_sync(db)
+    except Exception as e:
+        logger.error(f"MAXIS manual sync failed: {e}")
+        raise HTTPException(status_code=502, detail=f"Synchronizace selhala: {e}")
+
 app.include_router(api_router)
 
 app.add_middleware(
@@ -627,6 +642,37 @@ async def startup():
         logger.info("Storage initialized")
     except Exception as e:
         logger.error(f"Storage init failed: {e}")
+
+    # MAXIS weekly property sync + startup catch-up if stale (>6 days) or never run.
+    try:
+        from apscheduler.schedulers.asyncio import AsyncIOScheduler
+        from maxis_sync import run_maxis_sync
+
+        async def _maxis_job():
+            try:
+                await run_maxis_sync(db)
+            except Exception as e:
+                logger.error(f"MAXIS scheduled sync failed: {e}")
+
+        scheduler = AsyncIOScheduler(timezone="Europe/Prague")
+        scheduler.add_job(_maxis_job, "cron", day_of_week="mon", hour=4, minute=0,
+                          id="maxis_weekly", replace_existing=True)
+        scheduler.start()
+        app.state.scheduler = scheduler
+
+        st = await db["sync_status"].find_one({"key": "maxis_sync"})
+        stale = True
+        if st and st.get("last_sync"):
+            try:
+                last = datetime.fromisoformat(st["last_sync"])
+                stale = (datetime.now(timezone.utc) - last) > timedelta(days=6)
+            except Exception:
+                stale = True
+        if stale:
+            asyncio.create_task(_maxis_job())
+            logger.info("MAXIS sync: scheduled startup catch-up run")
+    except Exception as e:
+        logger.error(f"MAXIS scheduler init failed: {e}")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

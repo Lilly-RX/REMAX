@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Building, Users, MessageSquare, LogOut, LayoutGrid, ExternalLink, Star } from "lucide-react";
+import { Building, Users, MessageSquare, LogOut, LayoutGrid, ExternalLink, Star, RefreshCw } from "lucide-react";
+import { toast } from "sonner";
 import api from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { Logo } from "@/components/Logo";
@@ -14,9 +15,32 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [tab, setTab] = useState("overview");
   const [stats, setStats] = useState(null);
+  const [syncStatus, setSyncStatus] = useState(null);
+  const [syncing, setSyncing] = useState(false);
 
   const loadStats = () => api.get("/stats").then((r) => setStats(r.data)).catch(() => {});
-  useEffect(() => { loadStats(); }, [tab]);
+  const loadSyncStatus = () => api.get("/admin/maxis/status").then((r) => setSyncStatus(r.data)).catch(() => {});
+  useEffect(() => { loadStats(); loadSyncStatus(); }, [tab]);
+
+  const runSync = async () => {
+    setSyncing(true);
+    try {
+      const r = await api.post("/admin/maxis/sync");
+      toast.success(`Synchronizace hotová: +${r.data.added} nových, ${r.data.updated} aktualizováno, ${r.data.removed} odebráno`);
+      setSyncStatus(r.data);
+      loadStats();
+    } catch (e) {
+      toast.error("Synchronizace selhala. Zkuste to prosím znovu.");
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const fmtDate = (iso) => {
+    if (!iso) return "nikdy";
+    try { return new Date(iso).toLocaleString("cs-CZ", { dateStyle: "medium", timeStyle: "short" }); }
+    catch { return iso; }
+  };
 
   const NAV = [
     { id: "overview", label: "Přehled", icon: LayoutGrid },
@@ -88,6 +112,36 @@ export default function Dashboard() {
                   <div className="text-sm text-gray-500 mt-1">{s.label}</div>
                 </div>
               ))}
+            </div>
+
+            {/* MAXIS sync */}
+            <div className="bg-white border border-gray-200 rounded-2xl p-6 mt-6" data-testid="maxis-sync-card">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <RefreshCw size={18} className="text-[#003DA5]" />
+                    <h2 className="font-display text-lg font-bold text-[#0A0A0A]">Synchronizace nabídek (MAXIS)</h2>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Nabídky se automaticky aktualizují 1× týdně z RE/MAX. Můžete je také synchronizovat ručně.
+                  </p>
+                  <p className="text-xs text-gray-400 mt-2" data-testid="maxis-last-sync">
+                    Poslední synchronizace: <span className="font-semibold text-gray-600">{fmtDate(syncStatus?.last_sync)}</span>
+                    {syncStatus?.last_sync && (
+                      <> · {syncStatus.total} nabídek na webu</>
+                    )}
+                  </p>
+                </div>
+                <button
+                  onClick={runSync}
+                  disabled={syncing}
+                  data-testid="maxis-sync-btn"
+                  className="inline-flex items-center justify-center gap-2 bg-[#DC1C2E] hover:bg-[#a31522] disabled:opacity-60 text-white font-bold py-3 px-6 rounded-full shadow-lg shadow-red-900/20 transition whitespace-nowrap"
+                >
+                  <RefreshCw size={16} className={syncing ? "animate-spin" : ""} />
+                  {syncing ? "Synchronizuji…" : "Synchronizovat teď"}
+                </button>
+              </div>
             </div>
           </div>
         )}
