@@ -1,9 +1,15 @@
 import { MapPin, HeartHandshake, ShieldCheck, Target } from "lucide-react";
 import { PageHero, Reveal } from "@/components/motion";
+import { useSeo } from "@/lib/seo";
 
 const ABOUT_IMG = "/tachov.jpg";
 
 export default function About() {
+  useSeo({
+    title: "O nás – realitní kancelář na Tachovsku",
+    description: "Poznejte RE/MAX Active Broker – tým nezávislých realitních makléřů z Tachova s osobním přístupem, znalostí regionu a zázemím značky RE/MAX.",
+    path: "/o-nas",
+  });
   return (
     <div data-testid="about-page">
       <PageHero

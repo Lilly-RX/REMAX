@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import api, { mediaUrl } from "@/lib/api";
 import { formatPrice, PROPERTY_TYPES, DEAL_TYPES, STATUS_LABELS } from "@/lib/format";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { useSeo } from "@/lib/seo";
 
 export default function PropertyDetail() {
   const { id } = useParams();
@@ -15,6 +16,14 @@ export default function PropertyDetail() {
   const [lightbox, setLightbox] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [sending, setSending] = useState(false);
+
+  useSeo({
+    title: property ? property.title : "Nemovitost",
+    description: property
+      ? `${DEAL_TYPES[property.deal_type] || ""} – ${property.title}. ${property.location || "Tachovsko"}. Nabízí RE/MAX Active Broker.`
+      : "Detail nemovitosti od RE/MAX Active Broker v Tachově.",
+    path: `/nemovitosti/${id}`,
+  });
 
   const images = property?.images?.length ? property.images : [];
   const total = images.length;

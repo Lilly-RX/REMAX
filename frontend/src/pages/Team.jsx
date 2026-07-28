@@ -3,8 +3,14 @@ import { Phone, Mail } from "lucide-react";
 import api, { mediaUrl } from "@/lib/api";
 import { StarRating } from "@/components/StarRating";
 import { PageHero, Reveal } from "@/components/motion";
+import { useSeo } from "@/lib/seo";
 
 export default function Team() {
+  useSeo({
+    title: "Náš tým makléřů v Tachově",
+    description: "Seznamte se s makléři RE/MAX Active Broker v Tachově. Pět zkušených realitních profesionálů připravených pomoci vám s prodejem, koupí i pronájmem.",
+    path: "/tym",
+  });
   const [agents, setAgents] = useState([]);
   const [summary, setSummary] = useState({});
 

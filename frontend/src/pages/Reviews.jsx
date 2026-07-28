@@ -5,8 +5,14 @@ import api from "@/lib/api";
 import { StarRating, StarInput } from "@/components/StarRating";
 import { DEAL_LABELS, DEAL_OPTIONS } from "@/lib/reviewMeta";
 import { PageHero, Reveal } from "@/components/motion";
+import { useSeo } from "@/lib/seo";
 
 export default function Reviews() {
+  useSeo({
+    title: "Recenze klientů – RE/MAX Active Broker Tachov",
+    description: "Přečtěte si hodnocení klientů realitní kanceláře RE/MAX Active Broker v Tachově a napište vlastní recenzi.",
+    path: "/recenze",
+  });
   const [reviews, setReviews] = useState([]);
   const [agents, setAgents] = useState([]);
   const [sending, setSending] = useState(false);

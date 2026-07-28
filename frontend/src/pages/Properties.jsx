@@ -4,8 +4,14 @@ import api from "@/lib/api";
 import { PropertyCard } from "@/components/PropertyCard";
 import { DEAL_TYPES, PROPERTY_TYPES } from "@/lib/format";
 import { PageHero, Reveal } from "@/components/motion";
+import { useSeo } from "@/lib/seo";
 
 export default function Properties() {
+  useSeo({
+    title: "Nemovitosti na prodej a pronájem – Tachovsko",
+    description: "Aktuální nabídka bytů, domů, pozemků a komerčních prostor na Tachovsku i v zahraničí. Filtrujte podle typu, ceny, lokality a makléře.",
+    path: "/nemovitosti",
+  });
   const [searchParams] = useSearchParams();
   const [properties, setProperties] = useState([]);
   const [deal, setDeal] = useState(searchParams.get("deal") || "");

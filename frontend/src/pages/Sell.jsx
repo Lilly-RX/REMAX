@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import api from "@/lib/api";
 import { PROPERTY_TYPES } from "@/lib/format";
 import { PageHero, Reveal } from "@/components/motion";
+import { useSeo } from "@/lib/seo";
 
 const INTEREST = {
   prodej: "Prodej",
@@ -13,6 +14,11 @@ const INTEREST = {
 };
 
 export default function Sell() {
+  useSeo({
+    title: "Prodej, pronájem a odhad nemovitosti zdarma – Tachov",
+    description: "Chcete prodat, pronajmout nebo znát cenu své nemovitosti? RE/MAX Active Broker v Tachově vám připraví nezávazné tržní ocenění zdarma a postará se o celý prodej.",
+    path: "/prodej",
+  });
   const [searchParams] = useSearchParams();
   const initialType = ["prodej", "pronajem", "odhad"].includes(searchParams.get("typ"))
     ? searchParams.get("typ")

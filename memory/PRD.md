@@ -123,6 +123,19 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
   scrape of their remax-czech.cz office page.
 - Resend still sandbox-limited (OFFICE_EMAIL routes only to verified address) — needs domain verification.
 
+## Feature (2026-06-28) — Technické SEO
+- index.html: keyword-rich title, meta description + keywords, canonical, Open Graph + Twitter karty,
+  JSON-LD RealEstateAgent (adresa Náměstí Republiky 751 Tachov, tel +420371120180, email, geo, otevírací
+  doba Po-Čt 8:30-17:00 / Pá 8:30-16:00).
+- public/sitemap.xml (7 hlavních URL na doméně remaxactivebroker.cz) + public/robots.txt (Sitemap odkaz,
+  Disallow /admin). Pozn.: preview servíruje robots.txt platformy; na ostré doméně se použije náš.
+- src/lib/seo.js: useSeo hook nastavuje per-stránku document.title + description + OG + canonical.
+  Nasazeno na Home, Properties, About, Team, Contact, Sell, Reviews a dynamicky na PropertyDetail
+  (titulek = název nemovitosti) pro lepší indexaci jednotlivých nabídek.
+- Contact.jsx: opravena otevírací doba na Po-Čt 8:30-17:00 / Pá 8:30-16:00.
+- Uživatel musí sám (mimo kód): založit Google Business Profile a přidat web do Google Search Console
+  + poslat sitemapu. Adresa kanceláře: Náměstí Republiky 751, 347 01 Tachov; tel +420 371 120 180.
+
 ## Feature (2026-06-28) — Vylepšená galerie fotek na detailu nemovitosti
 - PropertyDetail.jsx: přidány šipky ◀▶ přes hlavní fotku (gallery-prev/next), přepínání klávesnicí
   (←/→), počítadlo „X / N" (gallery-counter), a fullscreen lightbox (klik na fotku nebo lupu) s vlastními

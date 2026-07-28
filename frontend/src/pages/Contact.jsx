@@ -3,8 +3,14 @@ import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import { toast } from "sonner";
 import api from "@/lib/api";
 import { PageHero, Reveal } from "@/components/motion";
+import { useSeo } from "@/lib/seo";
 
 export default function Contact() {
+  useSeo({
+    title: "Kontakt – realitní kancelář Tachov",
+    description: "Kontaktujte RE/MAX Active Broker – Náměstí Republiky 751, Tachov. Telefon +420 371 120 180, e-mail activebroker@re-max.cz. Rádi vám pomůžeme s nemovitostí.",
+    path: "/kontakt",
+  });
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [sending, setSending] = useState(false);
 
@@ -92,7 +98,7 @@ export default function Contact() {
                     <Clock className="text-[#003DA5] mt-0.5" />
                     <div>
                       <div className="font-bold text-[#0A0A0A]">Otevírací doba</div>
-                      <p className="text-gray-600 text-sm">Po–Pá: 8:30–17:00 · So–Ne: zavřeno</p>
+                      <p className="text-gray-600 text-sm">Po–Čt: 8:30–17:00 · Pá: 8:30–16:00 · So–Ne: zavřeno</p>
                     </div>
                   </div>
                 </div>

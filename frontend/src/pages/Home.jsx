@@ -26,6 +26,7 @@ import {
 import api from "@/lib/api";
 import { PropertyCard } from "@/components/PropertyCard";
 import { DEAL_TYPES, PROPERTY_TYPES } from "@/lib/format";
+import { useSeo } from "@/lib/seo";
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -154,6 +155,11 @@ const CHAPTERS = [
 ];
 
 export default function Home() {
+  useSeo({
+    title: "Reality Tachov – prodej, koupě a pronájem nemovitostí",
+    description: "RE/MAX Active Broker – realitní kancelář v Tachově. Sehraný tým 5 makléřů vám pomůže s prodejem, koupí i pronájmem nemovitostí na Tachovsku i v zahraničí.",
+    path: "/",
+  });
   const navigate = useNavigate();
   const [featured, setFeatured] = useState([]);
   const [reviews, setReviews] = useState([]);
