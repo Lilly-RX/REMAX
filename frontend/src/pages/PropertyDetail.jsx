@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { BedDouble, Bath, Maximize, MapPin, ArrowLeft, Phone, Mail, Send } from "lucide-react";
+import { BedDouble, Bath, Maximize, MapPin, ArrowLeft, Phone, Mail, Send, ChevronLeft, ChevronRight, X, Expand } from "lucide-react";
 import { toast } from "sonner";
 import api, { mediaUrl } from "@/lib/api";
 import { formatPrice, PROPERTY_TYPES, DEAL_TYPES, STATUS_LABELS } from "@/lib/format";
@@ -12,8 +12,29 @@ export default function PropertyDetail() {
   const [property, setProperty] = useState(null);
   const [agent, setAgent] = useState(null);
   const [active, setActive] = useState(0);
+  const [lightbox, setLightbox] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [sending, setSending] = useState(false);
+
+  const images = property?.images?.length ? property.images : [];
+  const total = images.length;
+  const next = () => total && setActive((i) => (i + 1) % total);
+  const prev = () => total && setActive((i) => (i - 1 + total) % total);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "ArrowRight") next();
+      else if (e.key === "ArrowLeft") prev();
+      else if (e.key === "Escape") setLightbox(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [total]);
+
+  useEffect(() => {
+    document.body.style.overflow = lightbox ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [lightbox]);
 
   useEffect(() => {
     api.get(`/properties/${id}`).then((r) => {
@@ -41,8 +62,6 @@ export default function PropertyDetail() {
 
   if (!property) return <div className="max-w-7xl mx-auto px-4 py-28 text-gray-500">Načítání…</div>;
 
-  const images = property.images?.length ? property.images : [];
-
   return (
     <div data-testid="property-detail-page" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
       <Link to="/nemovitosti" className="inline-flex items-center gap-2 text-sm font-bold text-[#003DA5] mb-8" data-testid="back-to-listings">
@@ -52,9 +71,15 @@ export default function PropertyDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* Gallery + info */}
         <div className="lg:col-span-2">
-          <div className="aspect-[16/10] overflow-hidden rounded-2xl bg-gray-100 relative">
+          <div className="aspect-[16/10] overflow-hidden rounded-2xl bg-gray-100 relative group">
             {images[active] ? (
-              <img src={mediaUrl(images[active])} alt={property.title} className="w-full h-full object-cover" />
+              <img
+                src={mediaUrl(images[active])}
+                alt={property.title}
+                onClick={() => setLightbox(true)}
+                data-testid="gallery-main-image"
+                className="w-full h-full object-cover cursor-zoom-in"
+              />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-300">Bez fotografie</div>
             )}
@@ -69,11 +94,30 @@ export default function PropertyDetail() {
               size={22}
               className="absolute top-4 right-4 w-11 h-11 bg-white/90 backdrop-blur shadow-lg"
             />
+            {total > 1 && (
+              <>
+                <button onClick={prev} data-testid="gallery-prev" aria-label="Předchozí fotka"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full bg-black/45 hover:bg-black/70 text-white backdrop-blur-sm transition">
+                  <ChevronLeft size={24} />
+                </button>
+                <button onClick={next} data-testid="gallery-next" aria-label="Další fotka"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full bg-black/45 hover:bg-black/70 text-white backdrop-blur-sm transition">
+                  <ChevronRight size={24} />
+                </button>
+                <div className="absolute bottom-3 right-3 flex items-center gap-2">
+                  <span className="bg-black/55 text-white text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm" data-testid="gallery-counter">{active + 1} / {total}</span>
+                </div>
+              </>
+            )}
+            <button onClick={() => setLightbox(true)} aria-label="Zvětšit fotku"
+              className="absolute bottom-3 left-3 w-10 h-10 flex items-center justify-center rounded-full bg-black/45 hover:bg-black/70 text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 transition" data-testid="gallery-expand">
+              <Expand size={18} />
+            </button>
           </div>
           {images.length > 1 && (
             <div className="flex gap-3 mt-3 overflow-x-auto scrollbar-hide">
               {images.map((img, i) => (
-                <button key={i} onClick={() => setActive(i)} className={`w-24 h-20 flex-shrink-0 overflow-hidden rounded-lg border-2 ${active === i ? "border-[#003DA5]" : "border-transparent"}`}>
+                <button key={i} onClick={() => setActive(i)} data-testid={`gallery-thumb-${i}`} className={`w-24 h-20 flex-shrink-0 overflow-hidden rounded-lg border-2 ${active === i ? "border-[#003DA5]" : "border-transparent"}`}>
                   <img src={mediaUrl(img)} alt="" loading="lazy" className="w-full h-full object-cover" />
                 </button>
               ))}
@@ -128,6 +172,41 @@ export default function PropertyDetail() {
           </div>
         </aside>
       </div>
+
+      {lightbox && images[active] && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center select-none"
+          onClick={() => setLightbox(false)}
+          data-testid="gallery-lightbox"
+        >
+          <button onClick={() => setLightbox(false)} aria-label="Zavřít"
+            className="absolute top-5 right-5 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/25 text-white transition" data-testid="lightbox-close">
+            <X size={26} />
+          </button>
+          {total > 1 && (
+            <span className="absolute top-6 left-1/2 -translate-x-1/2 text-white/80 text-sm font-bold tracking-wide" data-testid="lightbox-counter">{active + 1} / {total}</span>
+          )}
+          <img
+            src={mediaUrl(images[active])}
+            alt={property.title}
+            onClick={(e) => e.stopPropagation()}
+            className="max-w-[92vw] max-h-[85vh] object-contain rounded-lg shadow-2xl"
+            data-testid="lightbox-image"
+          />
+          {total > 1 && (
+            <>
+              <button onClick={(e) => { e.stopPropagation(); prev(); }} aria-label="Předchozí"
+                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-14 h-14 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/25 text-white transition" data-testid="lightbox-prev">
+                <ChevronLeft size={30} />
+              </button>
+              <button onClick={(e) => { e.stopPropagation(); next(); }} aria-label="Další"
+                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-14 h-14 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/25 text-white transition" data-testid="lightbox-next">
+                <ChevronRight size={30} />
+              </button>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

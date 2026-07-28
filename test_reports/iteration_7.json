@@ -1,0 +1,29 @@
+{
+  "summary": "Frontend-only testing of the new PropertyDetail photo gallery (property dbab0b6e-fae2-48ec-b8aa-77e0c1671fad, 14 images). Verified prev/next arrows, counter, wrap-around, keyboard ArrowLeft/ArrowRight, thumbnail strip + active highlight, and the full-screen lightbox (open via main image and expand button, prev/next buttons, counter, keyboard nav, Escape close, backdrop close, close button, image click does not close, body scroll lock). All gallery behaviors in the review request PASSED. One UX defect found: global keydown handler hijacks Arrow keys while the user types in the contact-form inputs.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "PropertyDetail gallery keydown handler", "issue": "The window-level keydown listener fires even when focus is inside a form field. Typing in the contact form (Jmeno/E-mail/Telefon/Zprava) and pressing ArrowLeft/ArrowRight moves the text cursor AND changes the gallery photo (verified: counter went 5/14 -> 4/14 while typing in an input). Should ignore events when e.target is INPUT/TEXTAREA/SELECT or contentEditable, and ideally only handle Arrow keys when the lightbox is open or the gallery is in view.", "selector": "[data-testid=\"gallery-counter\"]", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Property detail gallery", "issues": ["gallery-expand button is opacity-0 until hover (group-hover) - invisible/undiscoverable on touch devices where hover does not exist; consider always-visible on mobile"]}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Guard the PropertyDetail keydown handler against events originating from input/textarea/contentEditable elements so arrow keys don't hijack text-cursor movement in the contact form.",
+    "Optional: make gallery-expand visible on touch devices (no hover)."
+  ],
+  "critical_code_review_comments": [
+    "PropertyDetail.jsx keydown useEffect has deps [total] but calls next/prev closures - works because setActive is functional, fine; however it lacks a target guard (see bug above).",
+    "Thumbnail buttons had no data-testid; added data-testid=\"gallery-thumb-{i}\" (test-only attribute, no behavior change)."
+  ],
+  "updated_files": ["/app/frontend/src/pages/PropertyDetail.jsx"],
+  "success_rate": {"backend": "not tested", "frontend": "95% (all 4 requested gallery features pass; 1 keyboard-scope UX defect)"},
+  "seed_data_creation": "none",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Gallery verified end-to-end on /nemovitosti/dbab0b6e-fae2-48ec-b8aa-77e0c1671fad?nolenis=1. Navigate with wait_until='domcontentloaded' (remote images slow). Thumbnails now expose data-testid gallery-thumb-{index}. Backend was not tested this iteration.",
+  "rca_of_the_issue": "Arrow-key hijack: useEffect registers window 'keydown' with no check on e.target, so keystrokes inside form controls also drive gallery navigation."
+}
