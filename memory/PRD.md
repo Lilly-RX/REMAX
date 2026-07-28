@@ -123,6 +123,15 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
   scrape of their remax-czech.cz office page.
 - Resend still sandbox-limited (OFFICE_EMAIL routes only to verified address) — needs domain verification.
 
+## Feature (2026-06-28) — Vylepšená galerie fotek na detailu nemovitosti
+- PropertyDetail.jsx: přidány šipky ◀▶ přes hlavní fotku (gallery-prev/next), přepínání klávesnicí
+  (←/→), počítadlo „X / N" (gallery-counter), a fullscreen lightbox (klik na fotku nebo lupu) s vlastními
+  šipkami, počítadlem, zavřením přes Esc / klik na pozadí / křížek, a zámkem scrollu těla. Miniatury
+  fungují dál. Ověřeno testing_agentem iteration_7.json (všechny 4 funkce PASS).
+- Opraveno po testu: (1) klávesové šipky se ignorují při psaní do formulářových polí (guard na
+  INPUT/TEXTAREA/SELECT/contentEditable); (2) tlačítko lupy je vždy viditelné na mobilu (opacity-100
+  md:opacity-0 md:group-hover:opacity-100).
+
 ## Feature (2026-06-27) — Automatická synchronizace nabídek z MAXIS (FTP XML)
 - Nový modul `/app/backend/maxis_sync.py`: přes FTP stahuje `XMLNEW/nabidky.xml` (86 nabídek)
   a `XMLNEW/makleri.xml`, mapuje `id_uzivatel` → e-mail makléře → interní agent_id, upsertuje

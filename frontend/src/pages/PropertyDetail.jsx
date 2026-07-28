@@ -23,9 +23,12 @@ export default function PropertyDetail() {
 
   useEffect(() => {
     const onKey = (e) => {
+      const t = e.target;
+      const typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable);
+      if (e.key === "Escape") { setLightbox(false); return; }
+      if (typing) return;
       if (e.key === "ArrowRight") next();
       else if (e.key === "ArrowLeft") prev();
-      else if (e.key === "Escape") setLightbox(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -110,7 +113,7 @@ export default function PropertyDetail() {
               </>
             )}
             <button onClick={() => setLightbox(true)} aria-label="Zvětšit fotku"
-              className="absolute bottom-3 left-3 w-10 h-10 flex items-center justify-center rounded-full bg-black/45 hover:bg-black/70 text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 transition" data-testid="gallery-expand">
+              className="absolute bottom-3 left-3 w-10 h-10 flex items-center justify-center rounded-full bg-black/45 hover:bg-black/70 text-white backdrop-blur-sm opacity-100 md:opacity-0 md:group-hover:opacity-100 transition" data-testid="gallery-expand">
               <Expand size={18} />
             </button>
           </div>
