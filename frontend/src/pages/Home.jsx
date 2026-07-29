@@ -18,6 +18,7 @@ import {
   MapPin,
   Star,
   Facebook,
+  Instagram,
   Ruler,
   Handshake,
   KeyRound,
@@ -588,17 +589,30 @@ export default function Home() {
                   <p className="text-gray-400 mt-4 max-w-md leading-relaxed">
                     Díky sociálním sítím oslovíme mnohem více zájemců. Sledujte naši nabídku a nezmeškejte novou příležitost.
                   </p>
-                  <a
-                    href="https://www.facebook.com/RemaxActiveBroker"
-                    target="_blank"
-                    rel="noreferrer"
-                    data-testid="home-facebook-link"
-                    className="group inline-flex items-center gap-3 mt-8 bg-white text-[#05070E] font-bold py-3.5 px-6 rounded-full hover:scale-[1.03] transition-transform"
-                  >
-                    <Facebook size={20} className="text-[#003DA5]" />
-                    Sledovat na Facebooku
-                    <ArrowUpRight size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </a>
+                  <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                    <a
+                      href="https://www.facebook.com/RemaxActiveBroker"
+                      target="_blank"
+                      rel="noreferrer"
+                      data-testid="home-facebook-link"
+                      className="group inline-flex items-center justify-center gap-3 bg-white text-[#05070E] font-bold py-3.5 px-6 rounded-full hover:scale-[1.03] transition-transform"
+                    >
+                      <Facebook size={20} className="text-[#003DA5]" />
+                      Facebook
+                      <ArrowUpRight size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </a>
+                    <a
+                      href="https://www.instagram.com/remaxactivebroker"
+                      target="_blank"
+                      rel="noreferrer"
+                      data-testid="home-instagram-link"
+                      className="group inline-flex items-center justify-center gap-3 bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] text-white font-bold py-3.5 px-6 rounded-full hover:scale-[1.03] transition-transform"
+                    >
+                      <Instagram size={20} />
+                      Instagram
+                      <ArrowUpRight size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </a>
+                  </div>
                 </div>
 
                 <div className="lg:pl-10 lg:border-l border-white/10">
