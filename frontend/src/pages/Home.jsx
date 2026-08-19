@@ -106,7 +106,7 @@ const SERVICES = [
     title: "Chci odhad",
     desc: "Zdarma vám určíme reálnou tržní cenu vaší nemovitosti.",
     to: "/prodej?typ=odhad",
-    img: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?crop=entropy&cs=srgb&fm=jpg&q=85&w=900",
+    img: "/karolina.webp",
     icon: Ruler,
   },
   {
