@@ -123,6 +123,14 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
   scrape of their remax-czech.cz office page.
 - Resend still sandbox-limited (OFFICE_EMAIL routes only to verified address) — needs domain verification.
 
+## Feature (2026-06-28) — Nový makléř Petr Kratochvíl
+- Přidán jako 6. makléř (order 6) přes migraci `add_petr_agent_v1` + seed. Tel +420 739 663 560,
+  email p.kratochvil@re-max.cz (budoucí nabídky z MAXIS se na něj napárují automaticky), foto
+  public/petr.webp (ořez 4/5). Karolína (asistentka) posunuta na order 7 (zůstává poslední).
+- Texty počtu makléřů aktualizovány 5→6: Home hero „šesti zkušených makléřů", stat value 6,
+  manifest badge „6 makléřů", About „sehraná šestice", Team „Šest zkušených makléřů".
+- Tým nyní: 6 makléřů + 1 asistentka = 7 karet.
+
 ## Feature (2026-06-28) — Asistentka kanceláře Karolína Kratochvílová
 - Přidána do týmu (6. člen, role "Asistentka kanceláře", order 6) přes migraci `add_karolina_agent_v1`
   + seed_data.json. Tel +420 777 565 992, email karolina.kratochvilova@re-max.cz, foto uložena v

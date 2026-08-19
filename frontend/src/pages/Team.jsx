@@ -24,7 +24,7 @@ export default function Team() {
       <PageHero
         eyebrow="Náš tým"
         title="Lidé, kterým na vás záleží"
-        subtitle="Pět zkušených makléřů připravených pomoci vám s prodejem, koupí i pronájmem nemovitosti."
+        subtitle="Šest zkušených makléřů připravených pomoci vám s prodejem, koupí i pronájmem nemovitosti."
       />
 
       <section className="bg-white">

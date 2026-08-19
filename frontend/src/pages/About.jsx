@@ -15,7 +15,7 @@ export default function About() {
       <PageHero
         eyebrow="O nás"
         title="Malý tým s velkým srdcem pro Tachovsko"
-        subtitle="Jsme RE/MAX Active Broker – sehraná pětice nezávislých realitních profesionálů pod silnou značkou RE/MAX. Spojuje nás láska k regionu, poctivost a přesvědčení, že za každou nemovitostí stojí konkrétní lidský příběh."
+        subtitle="Jsme RE/MAX Active Broker – sehraná šestice nezávislých realitních profesionálů pod silnou značkou RE/MAX. Spojuje nás láska k regionu, poctivost a přesvědčení, že za každou nemovitostí stojí konkrétní lidský příběh."
       />
 
       <section className="bg-white">

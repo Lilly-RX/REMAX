@@ -683,6 +683,29 @@ async def startup():
     except Exception as e:
         logger.error(f"Migration add_karolina_agent_v1 failed: {e}")
 
+    # One-time migration: add new realtor Petr Kratochvíl (order 6) and move assistant Karolína to order 7.
+    try:
+        already = await db["_migrations"].find_one({"key": "add_petr_agent_v1"})
+        if already is None:
+            if await db.agents.count_documents({"email": "p.kratochvil@re-max.cz"}) == 0:
+                await db.agents.insert_one({
+                    "id": "13877000-0000-4000-8000-000000013877",
+                    "name": "Petr Kratochvíl",
+                    "role": "Realitní makléř",
+                    "bio": "Realitní makléř RE/MAX Active Broker. Rád vám pomůže s prodejem, koupí i pronájmem "
+                           "nemovitostí na Tachovsku s osobním přístupem.",
+                    "phone": "+420 739 663 560",
+                    "email": "p.kratochvil@re-max.cz",
+                    "photo_url": "/petr.webp",
+                    "order": 6,
+                })
+            await db.agents.update_one(
+                {"email": "karolina.kratochvilova@re-max.cz"}, {"$set": {"order": 7}})
+            await db["_migrations"].insert_one({"key": "add_petr_agent_v1", "at": datetime.now(timezone.utc).isoformat()})
+            logger.info("Migration add_petr_agent_v1 applied")
+    except Exception as e:
+        logger.error(f"Migration add_petr_agent_v1 failed: {e}")
+
     # Storage
     try:
         init_storage()
