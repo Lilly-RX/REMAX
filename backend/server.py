@@ -662,6 +662,27 @@ async def startup():
     except Exception as e:
         logger.error(f"Migration add_havlicek_agent_v1 failed: {e}")
 
+    # One-time migration: add office assistant Karolína Kratochvílová to the team. Idempotent by email.
+    try:
+        already = await db["_migrations"].find_one({"key": "add_karolina_agent_v1"})
+        if already is None:
+            if await db.agents.count_documents({"email": "karolina.kratochvilova@re-max.cz"}) == 0:
+                await db.agents.insert_one({
+                    "id": "13857000-0000-4000-8000-000000013857",
+                    "name": "Karolína Kratochvílová",
+                    "role": "Asistentka kanceláře",
+                    "bio": "Stará se o hladký chod kanceláře a je vaším prvním kontaktem. Pomůže s administrativou, "
+                           "koordinací prohlídek a připraví podklady pro odhad nemovitosti.",
+                    "phone": "+420 777 565 992",
+                    "email": "karolina.kratochvilova@re-max.cz",
+                    "photo_url": "/karolina.webp",
+                    "order": 6,
+                })
+            await db["_migrations"].insert_one({"key": "add_karolina_agent_v1", "at": datetime.now(timezone.utc).isoformat()})
+            logger.info("Migration add_karolina_agent_v1 applied")
+    except Exception as e:
+        logger.error(f"Migration add_karolina_agent_v1 failed: {e}")
+
     # Storage
     try:
         init_storage()

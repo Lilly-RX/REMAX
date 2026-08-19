@@ -19,6 +19,7 @@ import {
   Star,
   Facebook,
   Instagram,
+  Phone,
   Ruler,
   Handshake,
   KeyRound,
@@ -635,6 +636,22 @@ export default function Home() {
                     >
                       Kontaktovat
                     </Link>
+                  </div>
+
+                  <div className="mt-8 flex items-center gap-4 bg-white/[0.06] border border-white/10 rounded-2xl p-4" data-testid="home-estimate-assistant">
+                    <img
+                      src="/karolina.webp"
+                      alt="Karolína Kratochvílová"
+                      className="w-16 h-16 rounded-full object-cover object-top shrink-0"
+                    />
+                    <div className="leading-tight">
+                      <div className="text-xs font-bold uppercase tracking-[0.2em] text-[#DC1C2E]">Váš odhad má na starosti</div>
+                      <div className="font-display text-lg font-bold mt-1">Karolína Kratochvílová</div>
+                      <div className="text-sm text-gray-400">Asistentka kanceláře</div>
+                      <a href="tel:+420777565992" className="inline-flex items-center gap-2 text-sm text-white font-semibold mt-1.5 hover:text-[#DC1C2E] transition-colors">
+                        <Phone size={14} className="text-[#DC1C2E]" /> +420 777 565 992
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>

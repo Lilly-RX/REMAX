@@ -123,6 +123,15 @@ in official RE/MAX brand colors (Royal Blue #003DA5, Vibrant Red #DC1C2E, white/
   scrape of their remax-czech.cz office page.
 - Resend still sandbox-limited (OFFICE_EMAIL routes only to verified address) — needs domain verification.
 
+## Feature (2026-06-28) — Asistentka kanceláře Karolína Kratochvílová
+- Přidána do týmu (6. člen, role "Asistentka kanceláře", order 6) přes migraci `add_karolina_agent_v1`
+  + seed_data.json. Tel +420 777 565 992, email karolina.kratochvilova@re-max.cz, foto uložena v
+  public/karolina.webp (ořez 4/5 z nahrané fotky), photo_url="/karolina.webp".
+- Homepage: v CTA sekci „Chcete prodat nemovitost?" přidán blok „Váš odhad má na starosti Karolína
+  Kratochvílová" s fotkou, rolí a telefonem (data-testid home-estimate-assistant). Home.jsx: přidán
+  import ikony Phone.
+- Pozn.: tým má nyní 5 makléřů + 1 asistentku; texty „5 makléřů" ponechány (odkazují na makléře).
+
 ## Feature (2026-06-28) — Technické SEO
 - index.html: keyword-rich title, meta description + keywords, canonical, Open Graph + Twitter karty,
   JSON-LD RealEstateAgent (adresa Náměstí Republiky 751 Tachov, tel +420371120180, email, geo, otevírací
